@@ -4,7 +4,7 @@ app = Flask(__name__)
 app.secret_key = 'secret_key_for_flash_messages'  # Ganti dengan kunci rahasia yang lebih aman
 
 # Simpan data pengguna yang terdaftar (sederhana, seharusnya menggunakan database)
-registered_users = {'user1': 'password1', 'user2': 'password2'}
+registered_users = {'NaufalIhza': '123123', 'user2': 'password2'}
 
 # Arahkan root URL ke halaman login
 @app.route('/')
@@ -20,6 +20,7 @@ def login():
         
         if username in registered_users and registered_users[username] == password:
             flash('Login berhasil!', 'success')
+            session['username'] = username
             return redirect(url_for('data_form'))
         else:
             flash('Login gagal. Periksa kembali informasi Anda.', 'danger')
@@ -70,6 +71,14 @@ def data_form():
         flash('Data berhasil disubmit!', 'success')
 
     return render_template('data_form.html')
+
+# Rute untuk logout
+@app.route('/logout')
+def logout():
+    # Hapus informasi sesi (session)
+    session.pop('username', None)
+    flash('Anda telah berhasil logout.', 'success')
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
