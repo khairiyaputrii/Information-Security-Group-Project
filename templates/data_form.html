@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Data</title>
+</head>
+<body>
+    <h1>Form Data</h1>
+    <form method="POST" action="/submit_data">
+        <label for="nama_lengkap">Nama Lengkap:</label>
+        <input type="text" id="nama_lengkap" name="nama_lengkap" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="no_telepon">No Telepon (contoh: 6281257414911):</label>
+        <input type="tel" id="no_telepon" name="no_telepon" pattern="[0-9]{13}" required><br><br>
+
+        <label for="pendidikan">Pendidikan Terakhir:</label>
+        <select id="pendidikan" name="pendidikan" required>
+            <option value="SD">SD</option>
+            <option value="SMP">SMP</option>
+            <option value="SMA">SMA</option>
+            <option value="S1">S1</option>
+            <option value="S2">S2</option>
+            <option value="S3">S3</option>
+        </select><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
