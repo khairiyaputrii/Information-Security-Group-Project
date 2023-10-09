@@ -55,9 +55,9 @@ def welcome():
 @app.route('/data_form', methods=['GET', 'POST'])
 def data_form():
     # Periksa apakah pengguna sudah login
-    if 'username' not in session:
-        flash('Anda harus login terlebih dahulu untuk mengakses halaman ini.', 'warning')
-        return redirect(url_for('login'))
+    # if 'username' not in session:
+    #     flash('Anda harus login terlebih dahulu untuk mengakses halaman ini.', 'warning')
+    #     return redirect(url_for('login'))
 
     if request.method == 'POST':
         # Tangani data yang dikirimkan melalui formulir
