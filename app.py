@@ -9,7 +9,7 @@ app.secret_key = 'secret_key_for_flash_messages'  # Change to a more secure secr
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
-    'password': 'Danindra123.',
+    'password': '',
     'database': 'keamananinf',
 }
 
