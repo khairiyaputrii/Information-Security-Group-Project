@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Encrypted Data</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>View Encrypted Data</h1>
+    <form method="POST" action="{{ url_for('view_data') }}">
+        <select name="data_id">
+            <!-- Isi opsi dengan daftar ID data yang ingin dilihat -->
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <!-- Tambahkan lebih banyak opsi sesuai dengan data yang ada -->
+        </select>
+        <select name="encryption_method">
+            <option value="AES">AES</option>
+            <option value="DES">DES</option>
+            <option value="ARC4">ARC4</option>
+        </select>
+        <input type="submit" value="View Data">
+    </form>
+    <br>
+    <a href="{{ url_for('data_form') }}">Kembali</a>
+</body>
+</html>

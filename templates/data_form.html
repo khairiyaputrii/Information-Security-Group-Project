@@ -11,7 +11,7 @@
         {% if messages %}
             {% for message in messages %}
                 <div class="{{ message[1] }}">
-                    {{ message[0] }}
+                    {{ message }}
                 </div>
             {% endfor %}
         {% endif %}
@@ -20,6 +20,9 @@
     <form method="POST" action="/logout">
         <button type="submit" style="background-color: red; color: white;">Logout</button>
     </form>
+    <a href="/view_data">
+        <button style="background-color: red; color: white;">View Data</button>
+    </a>
     <form method="POST" action="/data_form">
         <label for="nama_lengkap">Nama Lengkap:</label>
         <input type="text" id="nama_lengkap" name="nama_lengkap" required><br><br>
@@ -39,8 +42,6 @@
             <option value="S2">S2</option>
             <option value="S3">S3</option>
         </select><br><br>
-
-        <button type="submit">Submit</button>
 
         <!-- Add a file input field for PDF upload with a maximum size of 5MB -->
         <label for="pdf_upload">Upload PDF (max 5MB):</label>
@@ -89,6 +90,5 @@
             return true;
         }
     </script>
-    </form>
 </body>
 </html>
