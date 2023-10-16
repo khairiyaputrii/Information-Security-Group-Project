@@ -4,9 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Data</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{{ message[1] }}">
+                    {{ message[0] }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <h1>Form Data</h1>
+    <form method="POST" action="/logout">
+        <button type="submit" style="background-color: red; color: white;">Logout</button>
+    </form>
     <form method="POST" action="/data_form">
         <label for="nama_lengkap">Nama Lengkap:</label>
         <input type="text" id="nama_lengkap" name="nama_lengkap" required><br><br>
