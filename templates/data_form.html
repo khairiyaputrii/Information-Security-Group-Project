@@ -4,9 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Data</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{{ message[1] }}">
+                    {{ message[0] }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <h1>Form Data</h1>
+    <form method="POST" action="/logout">
+        <button type="submit" style="background-color: red; color: white;">Logout</button>
+    </form>
     <form method="POST" action="/data_form">
         <label for="nama_lengkap">Nama Lengkap:</label>
         <input type="text" id="nama_lengkap" name="nama_lengkap" required><br><br>
@@ -27,52 +40,7 @@
             <option value="S3">S3</option>
         </select><br><br>
 
-        <!-- Add a file input field for PDF upload with a maximum size of 5MB -->
-        <label for="pdf_upload">Upload PDF (max 5MB):</label>
-        <input type="file" id="pdf_upload" name="pdf_upload" accept=".pdf" required><br><br>
-
-        <!-- Add a file input field for Image upload with a maximum size of 10MB -->
-        <label for="img_upload">Upload Image (max 10MB):</label>
-        <input type="file" id="img_upload" name="img_upload" accept=".jpeg" required><br><br>
-
-        <!-- Add a file input field for Video upload with a maximum size of 15MB -->
-        <label for="video_upload">Upload Video (max 15MB):</label>
-        <input type="file" id="video_upload" name="video_upload" accept=".mp4" required><br><br>
-
         <button type="submit">Submit</button>
     </form>
-
-    <script>
-        function validateForm() {
-            var pdfInput = document.getElementById("pdf_upload");
-            var imgInput = document.getElementById("img_upload");
-            var videoInput = document.getElementById("video_upload");
-
-            // Maximum file sizes in bytes
-            var maxPdfSize = 5 * 1024 * 1024; // 5MB
-            var maxImgSize = 10 * 1024 * 1024; // 10MB
-            var maxVideoSize = 15 * 1024 * 1024; // 15MB
-
-            // Check PDF file size
-            if (pdfInput.files.length > 0 && pdfInput.files[0].size > maxPdfSize) {
-                alert("PDF file size exceeds the maximum allowed size (5MB).");
-                return false;
-            }
-
-            // Check Image file size
-            if (imgInput.files.length > 0 && imgInput.files[0].size > maxImgSize) {
-                alert("Image file size exceeds the maximum allowed size (10MB).");
-                return false;
-            }
-
-            // Check Video file size
-            if (videoInput.files.length > 0 && videoInput.files[0].size > maxVideoSize) {
-                alert("Video file size exceeds the maximum allowed size (15MB).");
-                return false;
-            }
-
-            return true;
-        }
-    </script>
 </body>
 </html>
