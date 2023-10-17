@@ -1,0 +1,23 @@
+.flash-success {
+    color: green;
+    background-color: lightgreen;
+    border: 1px solid darkgreen;
+    padding: 10px;
+    width: 100%;
+}
+
+.flash-warning {
+    color: orange;
+    background-color: lightyellow;
+    border: 1px solid darkorange;
+    padding: 10px;
+    width: 100%;
+}
+
+.flash-error {
+    color: red;
+    background-color: pink;
+    border: 1px solid darkred;
+    padding: 10px;
+    width: 100%;
+}
