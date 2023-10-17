@@ -20,9 +20,16 @@
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-                <div class="{{ message[1] }}">
-                    {{ message }}
+            <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert" id="alert">
+                <div class="flex">
+                    <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                    <div>
+                        <div id="alert-message" class="{{ message[1] }}">
+                            {{ message }}
+                        </div>
+                    </div>
                 </div>
+            </div>            
             {% endfor %}
         {% endif %}
     {% endwith %}
@@ -41,7 +48,7 @@
 
         <div class="ml-6">
             <label for="no_telepon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black" >No Telepon (contoh: 6281257414911):</label>
-            <input type="tel" id="no_telepon" name="no_telepon" pattern="[0-9]{13}" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
+            <input type="tel" id="no_telepon" name="no_telepon" pattern="[0-9]{11,13}" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
             border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
         </div>
         
@@ -61,26 +68,18 @@
             </div>
         </div>
         
-        
-        <!-- <div class="mt-2 ml-6">
-            <button type="submit" class="block bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600">Submit</button>
-        </div>
-         -->
          
-        <!-- Add a file input field for PDF upload with a maximum size of 5MB -->
         <div class="ml-6">
             <label for="pdf_upload">Upload PDF (max 5MB):</label>
             <input type="file" id="pdf_upload" name="pdf_upload" accept=".pdf" required><br><br>
         </div>
         
 
-        <!-- Add a file input field for Image upload with a maximum size of 10MB -->
         <div class="ml-6">
         <label for="img_upload">Upload Image (max 10MB):</label>
         <input type="file" id="img_upload" name="img_upload" accept=".jpeg" required><br><br>
         </div>
 
-        <!-- Add a file input field for Video upload with a maximum size of 15MB -->
         <div class="ml-6">
         <label for="video_upload">Upload Video (max 15MB):</label>
         <input type="file" id="video_upload" name="video_upload" accept=".mp4" required><br><br>
@@ -89,6 +88,13 @@
         <button type="submit" class="ml-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:shadow-outline">Submit</button>
     </form>
 
+    <script>
+        setTimeout(function() {
+            var alert = document.getElementById("alert");
+            alert.style.display = "none";
+        }, 3000); 
+    </script>
+    
     <script>
         function validateForm() {
             var pdfInput = document.getElementById("pdf_upload");
