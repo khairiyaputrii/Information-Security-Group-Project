@@ -3,7 +3,6 @@
     background-color: lightgreen;
     border: 1px solid darkgreen;
     padding: 10px;
-    /* margin: 10px; */
     width: 100%;
 }
 
@@ -12,15 +11,13 @@
     background-color: lightyellow;
     border: 1px solid darkorange;
     padding: 10px;
-    /* margin: 10px; */
     width: 100%;
 }
-/* Customize the style of error messages */
+
 .flash-error {
     color: red;
     background-color: pink;
     border: 1px solid darkred;
     padding: 10px;
-    /* margin: 10px; */
     width: 100%;
 }

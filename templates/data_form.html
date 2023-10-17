@@ -11,9 +11,17 @@
         <div class="container mx-auto">
             <div class="flex justify-between items-center p-3">
                 <a href="#" class="text-white text-xl font-bold">FORM DATA</a>
-                <form method="POST" action="/logout">
+                <!-- <form method="POST" action="/logout">
                     <button type="submit" class="text-white">Logout</button>
-                </form>
+                </form> -->
+                <div class="flex gap-3">
+                    <form method="POST" action="/logout">
+                        <button type="submit" style="background-color: red; color: white;padding: 5px 15px;border-radius: 5px;">Logout</button>
+                    </form>
+                    <form method="POST" action="/view_data">
+                        <button type="submit" style="background-color: red; color: white;padding: 5px 15px;border-radius: 5px;">View</button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>    
@@ -21,24 +29,27 @@
         {% if messages %}
             {% for message in messages %}
                 <div class="{{ message[1] }}">
-                    {{ message[0] }}
+                    {{ message }}
                 </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
     <h1>Form Data</h1>
-    <form method="POST" action="/data_form">
-        <label for="nama_lengkap">Nama Lengkap:</label>
-        <input type="text" id="nama_lengkap" name="nama_lengkap" required><br><br>
+    <a href="/view_data">
+        <button style="background-color: red; color: white;">View Data</button>
+    </a>
+    <form method="POST" action="/data_form" enctype="multipart/form-data">
+        <label for="full_name">Full Name:</label>
+        <input type="text" id="full_name" name="full_name" required><br><br>
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br><br>
 
-        <label for="no_telepon">No Telepon (contoh: 6281257414911):</label>
-        <input type="tel" id="no_telepon" name="no_telepon" pattern="[0-9]{11,13}" required><br><br>
+        <label for="phone_number">Phone Number (ex: 6281257414911):</label>
+        <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]{13}" required><br><br>
 
-        <label for="pendidikan">Pendidikan Terakhir:</label>
-        <select id="pendidikan" name="pendidikan" required>
+        <label for="last_education">Last Education:</label>
+        <select id="last_education" name="last_education" required>
             <option value="SD">SD</option>
             <option value="SMP">SMP</option>
             <option value="SMA">SMA</option>
@@ -46,8 +57,6 @@
             <option value="S2">S2</option>
             <option value="S3">S3</option>
         </select><br><br>
-
-        <button type="submit">Submit</button>
 
         <!-- Add a file input field for PDF upload with a maximum size of 5MB -->
         <label for="pdf_upload">Upload PDF (max 5MB):</label>
@@ -96,6 +105,5 @@
             return true;
         }
     </script>
-    </form>
 </body>
 </html>

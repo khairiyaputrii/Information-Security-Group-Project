@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Decrypted Data</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Decrypted Data</h1>
+    <p>Data ID: {{ data_id }}</p>
+    <p>Nama Lengkap: {{ decrypted_nama_lengkap }}</p>
+    <p>Email: {{ decrypted_email }}</p>
+    <p>No. Telepon: {{ decrypted_no_telepon }}</p>
+    <p>Pendidikan: {{ decrypted_pendidikan }}</p>
+
+    <br>
+    <a href="{{ url_for('data_form') }}">Kembali</a>
+</body>
+</html>

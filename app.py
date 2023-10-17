@@ -1,24 +1,32 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from Crypto.Cipher import AES, DES, ARC4
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
-
+import mysql.connector
+import os
 app = Flask(__name__)
-app.secret_key = 'secret_key_for_flash_messages'  # Change to a more secure secret key
+app.secret_key = 'secret_key_for_flash_messages'
+
+# ? Set the upload folder
+app.config['UPLOAD_FOLDER'] = 'uploads'
+# ? Define allowed file extensions globally
+ALLOWED_EXTENSIONS = {'pdf', 'jpeg', 'jpg', 'png', 'mp4'}
 
 # ! DATABASE CONNECTION
 
-# Change to your database configuration
+# ? Change to your database configuration
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
     'password': '',
     'database': 'keamananinf',
+    'charset': 'utf8mb4',
+    'connection_timeout': 300
 }
 
-# Function to create a connection to the MySQL database
+# ? Function to create a connection to the MySQL database
 def create_connection():
     return mysql.connector.connect(**db_config)
 
@@ -57,24 +65,6 @@ def decrypt_message_arc4(ciphertext, key):
     decrypted = cipher.decrypt(ciphertext)
     return decrypted.decode('utf-8')
 
-# ? Generate a random 256-bit (32-byte) AES key
-# eas_key = get_random_bytes(32)
-# ? Generate a random 64-bit (8-byte) DES key
-# des_key = get_random_bytes(8)
-# ? Generate a random 128-bit (16-byte) RC4 key
-# arc4_key = get_random_bytes(16)
-
-# Message to be encrypted
-message_to_encrypt = "Hello, this is a secret message!"
-
-# ? Encrypt the message
-# encrypted_message = encrypt_message_des(message_to_encrypt, encryption_key)
-# print("Encrypted message:", encrypted_message)
-# ? Decrypt the message
-# decrypted_message = decrypt_message_des(encrypted_message, encryption_key)
-# print("Decrypted message:", decrypted_message)
-
-
 # ! ROUTING
 
 # ? Redirect the root URL to the login page
@@ -87,7 +77,7 @@ def root():
 def logout():
     if 'username' in session:
         session.pop('username', None)
-        flash('Anda telah berhasil logout.', 'flash-warning')
+        flash("Logout Successful.", "flash-warning")
     return redirect(url_for('login'))
 
 # ? Route for the login page
@@ -106,11 +96,11 @@ def login():
         result = cursor.fetchone()
 
         if result and check_password_hash(result[1], password):
-            flash('Login berhasil!', 'flash-success')
+            flash("Login Successful.", "flash-success")
             session['username'] = username
             return redirect(url_for('data_form'))
         else:
-            flash('Login gagal. Periksa kembali informasi Anda.', 'flash-error')
+            flash("Login failed. Check your data again.", "flash-error")
 
         cursor.close()
         connection.close()
@@ -133,9 +123,9 @@ def register():
         existing_username = cursor.fetchone()
 
         if existing_username:
-            flash('Username sudah terdaftar. Silakan login.', 'flash-warning')
+            flash("User name is already registered. Please come in.", "flash-warning")
         elif password != confirm_password:
-            flash('Konfirmasi password tidak sesuai.', 'flash-error')
+            flash("Confirm password is incorrect.", "flash-error")
         else:
             hashed_password = generate_password_hash(password)
 
@@ -146,7 +136,7 @@ def register():
             cursor.close()
             connection.close()
 
-            flash('Registrasi berhasil. Silakan login.', 'flash-success')
+            flash("Registration successful. Please log in.", "flash-success")
             return redirect(url_for('login'))
 
     return render_template('register.html')
@@ -160,36 +150,166 @@ def welcome():
 @app.route('/data_form', methods=['GET', 'POST'])
 def data_form():
     if 'username' not in session:
-        flash('Anda harus login terlebih dahulu untuk mengakses halaman ini.', 'flash-warning')
+        flash("You must log in first to access this page.", "flash-warning")
         return redirect(url_for('login'))
 
+    # ? Retrieve the username from the session
+    username = session['username']
+
     if request.method == 'POST':
-        nama_lengkap = request.form['nama_lengkap']
+        full_name = request.form['full_name']
         email = request.form['email']
-        no_telepon = request.form['no_telepon']
-        pendidikan = request.form['pendidikan']
+        phone_number = request.form['phone_number']
+        last_education = request.form['last_education']
         
         # ? EAS Encrypt Method
-        eas_key = get_random_bytes(32)
-        enc_nama_lengkap, iv = encrypt_message_aes(nama_lengkap, eas_key)
+        enc_eas_full_name, iv = encrypt_message_aes(full_name, eas_key)
+        enc_eas_email, iv = encrypt_message_aes(email, eas_key)
+        enc_eas_phone_number, iv = encrypt_message_aes(phone_number, eas_key)
+        enc_eas_last_education, iv = encrypt_message_aes(last_education, eas_key)
+
+        # ? DES Encrypt Method
+        enc_des_full_name = encrypt_message_des(full_name, des_key)
+        enc_des_email = encrypt_message_des(email, des_key)
+        enc_des_phone_number = encrypt_message_des(phone_number, des_key)
+        enc_des_last_education = encrypt_message_des(last_education, des_key)
+
+        # ? ARC4 Encrypt Method
+        enc_arc4_full_name = encrypt_message_arc4(full_name, des_key)
+        enc_arc4_email = encrypt_message_arc4(email, des_key)
+        enc_arc4_phone_number = encrypt_message_arc4(phone_number, des_key)
+        enc_arc4_last_education = encrypt_message_arc4(last_education, des_key)
+
+        # ? Set the upload folder dynamically based on the username
+        app.config['UPLOAD_FOLDER'] = f'uploads/{username}'
+
+        # ? Ensure the user's upload folder exists
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+        # ? Handle file uploads
+        pdf_path = save_file('pdf_upload', 'pdf')
+        img_path = save_file('img_upload', 'img')
+        video_path = save_file('video_upload', 'video')
 
         connection = create_connection()
         cursor = connection.cursor()
 
         insert_data_query = """
-        INSERT INTO data (nama_lengkap, enc_nama_lengkap, enc_key_nama_lengkap, email, no_telepon, pendidikan)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO data (
+            full_name,
+            enc_eas_full_name,
+            enc_des_full_name,
+            enc_arc4_full_name,
+            email,
+            enc_eas_email,
+            enc_des_email,
+            enc_arc4_email,
+            phone_number,
+            enc_eas_phone_number,
+            enc_des_phone_number,
+            enc_arc4_phone_number,
+            last_education,
+            enc_eas_last_education,
+            enc_des_last_education,
+            enc_arc4_last_education)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        data = (nama_lengkap, enc_nama_lengkap, eas_key, email, no_telepon, pendidikan)
+        data = (full_name, enc_eas_full_name, enc_des_full_name, enc_arc4_full_name, email, enc_eas_email, enc_des_email, enc_arc4_email, phone_number, enc_eas_phone_number, enc_des_phone_number, enc_arc4_phone_number, last_education, enc_eas_last_education, enc_des_last_education, enc_arc4_last_education)
         cursor.execute(insert_data_query, data)
 
         connection.commit()
         cursor.close()
         connection.close()
 
-        flash('Data berhasil disubmit!', 'flash-success')
+        flash("Data submitted successfully!", "flash-success")
 
     return render_template('data_form.html')
+
+# ? Function to save uploaded files
+def save_file(file_key, file_type):
+    file = request.files[file_key]
+    if file and allowed_file(file.filename, file_type):
+        # ? Use the dynamically set upload folder
+        file_folder = app.config['UPLOAD_FOLDER']
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(file_folder, filename)
+        file.save(file_path)
+        return file_path
+    return None
+
+# ? Function to check if the file type is allowed
+def allowed_file(filename, file_type):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# ? Route to decrypt and view submitted data
+@app.route('/view_data', methods=['GET', 'POST'])
+def view_data():
+    if 'username' not in session:
+        flash("You must log in first to access this page.", "flash-warning")
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        enc_data_id = request.form['data_id']
+        encryption_method = request.form['encryption_method']
+
+        connection = create_connection()
+        cursor = connection.cursor()
+
+        get_data_query = """
+        SELECT 
+            full_name, 
+            email, 
+            phone_number, 
+            last_education, 
+            enc_eas_full_name, 
+            enc_eas_email, 
+            enc_eas_phone_number, 
+            enc_eas_last_education, 
+            enc_des_full_name, 
+            enc_des_email, 
+            enc_des_phone_number, 
+            enc_des_last_education, 
+            enc_arc4_full_name, 
+            enc_arc4_email, 
+            enc_arc4_phone_number, 
+            enc_arc4_last_education
+        FROM data
+        WHERE id = %s
+        """
+        cursor.execute(get_data_query, (enc_data_id,))
+        data = cursor.fetchone()
+
+        if data:
+            if encryption_method == 'AES':
+                decrypted_full_name = decrypt_message_aes(data[4], data[5], eas_key)
+                decrypted_email = decrypt_message_aes(data[6], data[7], eas_key)
+                decrypted_phone_number = decrypt_message_aes(data[8], data[9], eas_key)
+                decrypted_last_education = decrypt_message_aes(data[10], data[11], eas_key)
+            elif encryption_method == 'DES':
+                decrypted_full_name = decrypt_message_des(data[12], eas_key)
+                decrypted_email = decrypt_message_des(data[13], eas_key)
+                decrypted_phone_number = decrypt_message_des(data[14], eas_key)
+                decrypted_last_education = decrypt_message_des(data[15], eas_key)
+            elif encryption_method == 'ARC4':
+                decrypted_full_name = decrypt_message_arc4(data[16], eas_key)
+                decrypted_email = decrypt_message_arc4(data[17], eas_key)
+                decrypted_phone_number = decrypt_message_arc4(data[18], eas_key)
+                decrypted_last_education = decrypt_message_arc4(data[19], eas_key)
+
+            return render_template('view_data.html', data_id=enc_data_id, 
+                                   decrypted_full_name=decrypted_full_name,
+                                   decrypted_email=decrypted_email,
+                                   decrypted_phone_number=decrypted_phone_number,
+                                   decrypted_last_education=decrypted_last_education)
+
+    return render_template('view_data_form.html')
+
+# ? Generate a random 256-bit (32-byte) AES key
+eas_key = get_random_bytes(32)
+# ? Generate a random 64-bit (8-byte) DES key
+des_key = get_random_bytes(8)
+# ? Generate a random 128-bit (16-byte) RC4 key
+arc4_key = get_random_bytes(16)
 
 if __name__ == '__main__':
     app.run(debug=True)
