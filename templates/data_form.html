@@ -4,42 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <h1>Form Data</h1>
-    <form method="POST" action="/submit_data" enctype="multipart/form-data" onsubmit="return validateForm()">
-        <label for="nama_lengkap">Nama Lengkap:</label>
-        <input type="text" id="nama_lengkap" name="nama_lengkap" required><br><br>
+    <nav class="bg-indigo-700 shadow-lg">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center p-3">
+                <a href="#" class="text-white text-xl font-bold">FORM DATA</a>
+                <form method="POST" action="/logout">
+                    <button type="submit" class="ml-5 text-white bg-red-600 p-1 m-0 rounded hover:bg-red-500">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{{ message[1] }}">
+                    {{ message[0] }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="POST" action="/data_form">
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+        <div class="ml-6 mt-6">
+            <label for="nama_lengkap" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Nama Lengkap:</label>
+            <input type="text" id="nama_lengkap" name="nama_lengkap" class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
+        </div>
+        
+        <div class="ml-6 mt-6">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Email:</label>
+            <input type="email" id="email" name="email" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
+            border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
+        </div>
 
-        <label for="no_telepon">No Telepon (contoh: 6281257414911):</label>
-        <input type="tel" id="no_telepon" name="no_telepon" pattern="[0-9]{13}" required><br><br>
-
-        <label for="pendidikan">Pendidikan Terakhir:</label>
-        <select id="pendidikan" name="pendidikan" required>
-            <option value="SD">SD</option>
-            <option value="SMP">SMP</option>
-            <option value="SMA">SMA</option>
-            <option value="S1">S1</option>
-            <option value="S2">S2</option>
-            <option value="S3">S3</option>
-        </select><br><br>
-
+        <div class="ml-6">
+            <label for="no_telepon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black" >No Telepon (contoh: 6281257414911):</label>
+            <input type="tel" id="no_telepon" name="no_telepon" pattern="[0-9]{13}" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
+            border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
+        </div>
+        
+        <div class="ml-6 mb-2">
+            <div class="inline-block relative">
+                <div class="flex">
+                    <label class="mr-3" for="pendidikan">Pendidikan Terakhir:</label>
+                    <select id="pendidikan" name="pendidikan" class="block appearance-none bg-gray-200 border border-gray-400 hover:border-gray-500 px-2 py-1 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
+                        <option value="SD">SD</option>
+                        <option value="SMP">SMP</option>
+                        <option value="SMA">SMA</option>
+                        <option value="S1">S1</option>
+                        <option value="S2">S2</option>
+                        <option value="S3">S3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- <div class="mt-2 ml-6">
+            <button type="submit" class="block bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600">Submit</button>
+        </div>
+         -->
+         
         <!-- Add a file input field for PDF upload with a maximum size of 5MB -->
-        <label for="pdf_upload">Upload PDF (max 5MB):</label>
-        <input type="file" id="pdf_upload" name="pdf_upload" accept=".pdf" required><br><br>
+        <div class="ml-6">
+            <label for="pdf_upload">Upload PDF (max 5MB):</label>
+            <input type="file" id="pdf_upload" name="pdf_upload" accept=".pdf" required><br><br>
+        </div>
+        
 
         <!-- Add a file input field for Image upload with a maximum size of 10MB -->
+        <div class="ml-6">
         <label for="img_upload">Upload Image (max 10MB):</label>
         <input type="file" id="img_upload" name="img_upload" accept=".jpeg" required><br><br>
+        </div>
 
         <!-- Add a file input field for Video upload with a maximum size of 15MB -->
+        <div class="ml-6">
         <label for="video_upload">Upload Video (max 15MB):</label>
         <input type="file" id="video_upload" name="video_upload" accept=".mp4" required><br><br>
+        </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" class="ml-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:shadow-outline">Submit</button>
     </form>
 
     <script>
@@ -74,5 +121,6 @@
             return true;
         }
     </script>
+    </form>
 </body>
 </html>
