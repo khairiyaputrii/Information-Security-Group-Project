@@ -192,9 +192,9 @@ def data_form():
         os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
         # ? Handle file uploads
-        pdf_path = save_file('pdf_upload', 'pdf')
-        img_path = save_file('img_upload', 'img')
-        video_path = save_file('video_upload', 'video')
+        pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', encryption_method)
+        img_path = save_and_encrypt_file('img_upload', 'img', encryption_method)
+        video_path = save_and_encrypt_file('video_upload', 'video', encryption_method)
 
         connection = create_connection()
         cursor = connection.cursor()
@@ -230,17 +230,55 @@ def data_form():
 
     return render_template('data_form.html')
 
-# ? Function to save uploaded files
-def save_file(file_key, file_type):
+# ? Function to save and encrypt uploaded files
+def save_and_encrypt_file(file_key, file_type, encryption_method):
     file = request.files[file_key]
     if file and allowed_file(file.filename, file_type):
-        # ? Use the dynamically set upload folder
         file_folder = app.config['UPLOAD_FOLDER']
         filename = secure_filename(file.filename)
         file_path = os.path.join(file_folder, filename)
         file.save(file_path)
+
+        if encryption_method == 'AES':
+            key = eas_key
+        elif encryption_method == 'DES':
+            key = des_key
+        elif encryption_method == 'ARC4':
+            key = arc4_key
+
+        if file_type == 'pdf':
+            encrypt_pdf_file(file_path, key)
+        elif file_type == 'img':
+            encrypt_image_file(file_path, key)
+        elif file_type == 'video':
+            encrypt_video_file(file_path, key)
+
         return file_path
-    return None
+
+def encrypt_pdf_file(pdf_file_path, key):
+    output_pdf = PdfFileWriter()
+    input_pdf = PdfFileReader(open(pdf_file_path, "rb"))
+
+    for page_num in range(input_pdf.numPages):
+        page = input_pdf.getPage(page_num)
+        output_pdf.addPage(page)
+
+    with open(pdf_file_path, "wb") as output:
+        output_pdf.encrypt(key)
+        output_pdf.write(output)
+
+def encrypt_image_file(image_file_path, key):
+    image = Image.open(image_file_path)
+    image = image.convert("RGB")
+    encrypted_data = encrypt_message_aes(image.tobytes(), key)
+    with open(image_file_path, "wb") as output:
+        output.write(encrypted_data)
+
+def encrypt_video_file(video_file_path, key):
+    clip = mp.VideoFileClip(video_file_path)
+    encrypted_data = encrypt_message_aes(clip.to_videofile(), key)
+    with open(video_file_path, "wb") as output:
+        output.write(encrypted_data)
 
 # ? Function to check if the file type is allowed
 def allowed_file(filename, file_type):
