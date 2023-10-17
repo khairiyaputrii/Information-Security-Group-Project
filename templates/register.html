@@ -11,11 +11,13 @@
     <div class="w-full max-w-md bg-white p-8 rounded shadow-md">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                {% for message in messages %}
-                    <div class="{{ message[1] }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+                <div>
+                    {% for message in messages %}
+                        <div class="w-full rounded-sm bg-yellow-100 border-2 border-yellow-400 text-center mb-5 font-bold">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
 

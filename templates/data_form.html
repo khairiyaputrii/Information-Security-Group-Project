@@ -17,6 +17,7 @@
             </div>
         </div>
     </nav>    
+<<<<<<< HEAD
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -38,25 +39,47 @@
         <div class="ml-6 mt-6">
             <label for="nama_lengkap" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Nama Lengkap:</label>
             <input type="text" id="nama_lengkap" name="nama_lengkap" class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
+=======
+    <form method="POST" action="/data_form" class="flex flex-col justify-center items-center mt-16">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="rounded-sm bg-yellow-100 border-2 border-yellow-400 text-center w-96 mb-5 font-bold">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div>
+            <label for="full_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Full Name</label>
+            <input type="text" id="full_name" name="full_name" class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="Enter your full name here">
+>>>>>>> 70f2e66f0489196e3f4c7122ab9a2f43b6cb5917
         </div>
         
-        <div class="ml-6 mt-6">
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Email:</label>
+        <div>
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Email</label>
             <input type="email" id="email" name="email" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
-            border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
+            border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="Enter you email here">
         </div>
 
+<<<<<<< HEAD
         <div class="ml-6">
             <label for="no_telepon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black" >No Telepon (contoh: 6281257414911):</label>
             <input type="tel" id="no_telepon" name="no_telepon" pattern="[0-9]{11,13}" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
             border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required>
+=======
+        <div>
+            <label for="phone_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black" >Phone Number</label>
+            <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]{13}" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
+            border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="(ex: 6281257414911)">
+>>>>>>> 70f2e66f0489196e3f4c7122ab9a2f43b6cb5917
         </div>
         
-        <div class="ml-6 mb-2">
+        <div class="block mb-5 text-sm font-medium text-gray-900 dark:text-black">
             <div class="inline-block relative">
-                <div class="flex">
-                    <label class="mr-3" for="pendidikan">Pendidikan Terakhir:</label>
-                    <select id="pendidikan" name="pendidikan" class="block appearance-none bg-gray-200 border border-gray-400 hover:border-gray-500 px-2 py-1 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
+                <div class="flex flex-col gap-2">
+                    <label class="mr-3" for="last_education">Last Education</label>
+                    <select id="last_education" name="last_education" class="block appearance-none bg-gray-200 border w-96 border-gray-400 hover:border-gray-500 px-2 py-1 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
                         <option value="SD">SD</option>
                         <option value="SMP">SMP</option>
                         <option value="SMA">SMA</option>
@@ -67,14 +90,22 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
         
          
         <div class="ml-6">
             <label for="pdf_upload">Upload PDF (max 5MB):</label>
             <input type="file" id="pdf_upload" name="pdf_upload" accept=".pdf" required><br><br>
+=======
+         
+        <!-- Add a file input field for PDF upload with a maximum size of 5MB -->
+        <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
+            <label for="pdf_upload">Upload PDF (max 5MB)</label>
+            <input type="file" id="pdf_upload" name="pdf_upload" accept=".pdf" required>
+>>>>>>> 70f2e66f0489196e3f4c7122ab9a2f43b6cb5917
         </div>
-        
 
+<<<<<<< HEAD
         <div class="ml-6">
         <label for="img_upload">Upload Image (max 10MB):</label>
         <input type="file" id="img_upload" name="img_upload" accept=".jpeg" required><br><br>
@@ -83,9 +114,21 @@
         <div class="ml-6">
         <label for="video_upload">Upload Video (max 15MB):</label>
         <input type="file" id="video_upload" name="video_upload" accept=".mp4" required><br><br>
+=======
+        <!-- Add a file input field for Image upload with a maximum size of 10MB -->
+        <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
+            <label for="img_upload">Upload Image (max 10MB):</label>
+            <input type="file" id="img_upload" name="img_upload" accept=".jpeg" required>
         </div>
 
-        <button type="submit" class="ml-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:shadow-outline">Submit</button>
+        <!-- Add a file input field for Video upload with a maximum size of 15MB -->
+        <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
+            <label for="video_upload">Upload Video (max 15MB):</label>
+            <input type="file" id="video_upload" name="video_upload" accept=".mp4" required>
+>>>>>>> 70f2e66f0489196e3f4c7122ab9a2f43b6cb5917
+        </div>
+
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:shadow-outline w-96">Submit</button>
     </form>
 
     <script>
