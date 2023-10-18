@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from Crypto.Cipher import AES, DES, ARC4
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
-from PyPDF2 import PdfFileWriter, PdfFileReader
+from PyPDF2 import PdfWriter, PdfReader
 from PIL import Image
 
 import moviepy.editor as mp
@@ -192,9 +192,9 @@ def data_form():
         os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
         # ? Handle file uploads
-        pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', encryption_method)
-        img_path = save_and_encrypt_file('img_upload', 'img', encryption_method)
-        video_path = save_and_encrypt_file('video_upload', 'video', encryption_method)
+        pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', 'AES')
+        img_path = save_and_encrypt_file('img_upload', 'img', 'DES')
+        video_path = save_and_encrypt_file('video_upload', 'video', 'ARC4')
 
         connection = create_connection()
         cursor = connection.cursor()
@@ -256,13 +256,11 @@ def save_and_encrypt_file(file_key, file_type, encryption_method):
         return file_path
 
 def encrypt_pdf_file(pdf_file_path, key):
-    output_pdf = PdfFileWriter()
-    input_pdf = PdfFileReader(open(pdf_file_path, "rb"))
-
-    for page_num in range(input_pdf.numPages):
-        page = input_pdf.getPage(page_num)
-        output_pdf.addPage(page)
-
+    output_pdf = PdfWriter()
+    input_pdf = PdfReader(open(pdf_file_path, "rb"))
+    for page_num in range(len(input_pdf.pages)):
+        page = input_pdf.pages[page_num]
+        output_pdf.add_page(page)
     with open(pdf_file_path, "wb") as output:
         output_pdf.encrypt(key)
         output_pdf.write(output)
@@ -275,10 +273,11 @@ def encrypt_image_file(image_file_path, key):
         output.write(encrypted_data)
 
 def encrypt_video_file(video_file_path, key):
-    clip = mp.VideoFileClip(video_file_path)
-    encrypted_data = encrypt_message_aes(clip.to_videofile(), key)
-    with open(video_file_path, "wb") as output:
-        output.write(encrypted_data)
+    with open(video_file_path, "rb") as video_file:
+        video_data = video_file.read()
+        encrypted_data = encrypt_message_aes(video_data, key)
+        with open(video_file_path, "wb") as output:
+            output.write(encrypted_data)
 
 # ? Function to check if the file type is allowed
 def allowed_file(filename, file_type):

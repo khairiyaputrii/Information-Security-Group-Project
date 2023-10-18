@@ -17,7 +17,7 @@
             </div>
         </div>
     </nav>    
-    <form method="POST" action="/data_form" class="flex flex-col justify-center items-center mt-16">
+    <form method="POST" action="/data_form" class="flex flex-col justify-center items-center mt-16" enctype="multipart/form-data">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
