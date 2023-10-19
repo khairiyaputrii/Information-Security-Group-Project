@@ -6,7 +6,8 @@ from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
 from PyPDF2 import PdfWriter, PdfReader
 from PIL import Image
-from func import encrypt_message_aes, decrypt_message_aes, encrypt_message_des, decrypt_message_des, encrypt_message_arc4, decrypt_message_arc4
+from meta import encrypt_message_aes, decrypt_message_aes, encrypt_message_des, decrypt_message_des, encrypt_message_arc4, decrypt_message_arc4
+from image import encrypt_image_aes, decrypt_image_aes
 
 import moviepy.editor as mp
 import mysql.connector
@@ -270,5 +271,11 @@ if __name__ == '__main__':
     # ? Generate a random 128-bit (16-byte) RC4 key
     # arc4_key = get_random_bytes(16)
     arc4_key = b'\x4a\x2d\x90\x8c\xce\xf4\x0b\x6f\xe0\x1a\x0e\x63\x17\x45\x98\xf2'
+    
+    input_image_path = 'uploads/NaufalIhza/jersey-ori.jpeg'
+    encrypted_image_path = 'uploads/NaufalIhza/jersey-enc.enc'
+    decrypted_image_path = 'uploads/NaufalIhza/jersey-dec.jpeg'
+    encrypt_image_aes(input_image_path, encrypted_image_path, aes_key)
+    decrypt_image_aes(encrypted_image_path, decrypted_image_path, aes_key)
 
     app.run(debug=True)
