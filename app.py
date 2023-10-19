@@ -7,7 +7,9 @@ from Crypto.Util.Padding import pad, unpad
 from PyPDF2 import PdfWriter, PdfReader
 from PIL import Image
 from meta import encrypt_message_aes, decrypt_message_aes, encrypt_message_des, decrypt_message_des, encrypt_message_arc4, decrypt_message_arc4
-from image import encrypt_image_aes, decrypt_image_aes
+from image import encrypt_image_file
+from video import encrypt_video_file
+from file import encrypt_pdf_file
 
 import moviepy.editor as mp
 import mysql.connector
@@ -26,7 +28,36 @@ ALLOWED_EXTENSIONS = {'pdf', 'jpeg', 'jpg', 'png', 'mp4'}
 # ? Function to create a connection to the MySQL database
 def create_connection():
     return mysql.connector.connect(**db_config)
-    
+
+# ? Function to check if the file type is allowed
+def allowed_file(filename, file_type):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# ? Function to save and encrypt uploaded files
+def save_and_encrypt_file(file_key, file_type, encryption_method, iv):
+    file = request.files[file_key]
+    if file and allowed_file(file.filename, file_type):
+        file_folder = app.config['UPLOAD_FOLDER']
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(file_folder, filename)
+        file.save(file_path)
+
+        if encryption_method == 'AES':
+            key = aes_key
+        elif encryption_method == 'DES':
+            key = des_key
+        elif encryption_method == 'ARC4':
+            key = arc4_key
+
+        if file_type == 'pdf':
+            encrypt_pdf_file(file_path, key)
+        elif file_type == 'img':
+            encrypt_image_file(file_path, key, iv)
+        elif file_type == 'video':
+            encrypt_video_file(file_path, key)
+
+        return file_path
+
 # ! DATABASE CONNECTION
 
 # ? Change to your database configuration
@@ -145,6 +176,9 @@ def data_form():
             enc_email = encrypt_message_aes(aes_key, email, iv)
             enc_phone_number = encrypt_message_aes(aes_key, phone_number, iv)
             enc_last_education = encrypt_message_aes(aes_key, last_education, iv)
+            # img_path = save_and_encrypt_file('img_upload', 'img', 'AES', iv)
+            # pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', 'AES')
+            # video_path = save_and_encrypt_file('video_upload', 'video', 'AES')
             end_time = time.perf_counter()
             enc_dec_key = aes_key
         if enc_dec_method == 'DES':
@@ -154,6 +188,9 @@ def data_form():
             enc_email = encrypt_message_des(des_key, email, iv)
             enc_phone_number = encrypt_message_des(des_key, phone_number, iv)
             enc_last_education = encrypt_message_des(des_key, last_education, iv)
+            # img_path = save_and_encrypt_file('img_upload', 'img', 'DES')
+            # pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', 'DES')
+            # video_path = save_and_encrypt_file('video_upload', 'video', 'DES')
             end_time = time.perf_counter()
             enc_dec_key = des_key
         if enc_dec_method == 'ARC4':
@@ -163,13 +200,11 @@ def data_form():
             enc_email = encrypt_message_arc4(arc4_key, email)
             enc_phone_number = encrypt_message_arc4(arc4_key, phone_number)
             enc_last_education = encrypt_message_arc4(arc4_key, last_education)
+            # img_path = save_and_encrypt_file('img_upload', 'img', 'ARC4')
+            # pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', 'ARC4')
+            # video_path = save_and_encrypt_file('video_upload', 'video', 'ARC4')
             end_time = time.perf_counter()
             enc_dec_key = arc4_key
-        
-        # ? Handle file uploads
-        # pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', 'AES')
-        # img_path = save_and_encrypt_file('img_upload', 'img', 'DES')
-        # video_path = save_and_encrypt_file('video_upload', 'video', 'ARC4')
 
         connection = create_connection()
         cursor = connection.cursor()

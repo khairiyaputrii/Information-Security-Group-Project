@@ -10,3 +10,13 @@ from PIL import Image
 import moviepy.editor as mp
 import mysql.connector
 import os
+
+def encrypt_pdf_file(pdf_file_path, key):
+    output_pdf = PdfWriter()
+    input_pdf = PdfReader(open(pdf_file_path, "rb"))
+    for page_num in range(len(input_pdf.pages)):
+        page = input_pdf.pages[page_num]
+        output_pdf.add_page(page)
+    with open(pdf_file_path, "wb") as output:
+        output_pdf.encrypt(key)
+        output_pdf.write(output)

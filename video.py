@@ -10,3 +10,10 @@ from PIL import Image
 import moviepy.editor as mp
 import mysql.connector
 import os
+
+def encrypt_video_file(video_file_path, key):
+    with open(video_file_path, "rb") as video_file:
+        video_data = video_file.read()
+        encrypted_data = encrypt_message_aes(video_data, key)
+        with open(video_file_path, "wb") as output:
+            output.write(encrypted_data)
