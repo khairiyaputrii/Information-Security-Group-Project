@@ -7,33 +7,38 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <nav class="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 shadow-lg">
+    <nav class="bg-gradient-to-r from-pink-500 via-pink400 to-pink-300 shadow-lg">
         <div class="container mx-auto">
             <div class="flex justify-between items-center p-3">
                 <a href="#" class="text-white text-xl font-bold">FORM DATA</a>
-                <form method="POST" action="/logout">
-                    <button type="submit" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center ml-10">Logout</button>
-                </form>
+                <div class="flex gap-3">
+                    <form method="POST" action="/logout">
+                        <button type="submit" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Logout</button>
+                    </form>
+                    <form method="GET" action="/view_data_form">
+                        <button type="submit" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">View</button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>    
     <form method="POST" action="/data_form" class="flex flex-col justify-center items-center mt-16" enctype="multipart/form-data">
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md message" role="alert" id="alert">
-                <div class="flex">
-                    <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
-                    <div>
-                        <div id="alert-message" class="{{ message[1] }}">
-                            {{ message }}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md message" role="alert" id="alert">
+                    <div class="flex">
+                        <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                        <div>
+                            <div id="alert-message" class="{{ message[1] }}">
+                                {{ message }}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>            
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+                </div>            
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <div>
             <label for="full_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Full Name</label>
             <input type="text" id="full_name" name="full_name" class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="Enter your full name here">
@@ -68,21 +73,34 @@
         </div>
          
         <!-- Add a file input field for PDF upload with a maximum size of 5MB -->
-        <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
+        <!-- <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
             <label for="pdf_upload">Upload PDF (max 5MB)</label>
             <input type="file" id="pdf_upload" name="pdf_upload" accept=".pdf" required>
-        </div>
+        </div> -->
 
         <!-- Add a file input field for Image upload with a maximum size of 10MB -->
-        <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
+        <!-- <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
             <label for="img_upload">Upload Image (max 10MB):</label>
             <input type="file" id="img_upload" name="img_upload" accept=".jpeg" required>
-        </div>
+        </div> -->
 
         <!-- Add a file input field for Video upload with a maximum size of 15MB -->
-        <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
+        <!-- <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
             <label for="video_upload">Upload Video (max 15MB):</label>
             <input type="file" id="video_upload" name="video_upload" accept=".mp4" required>
+        </div> -->
+
+        <div class="block mb-5 text-sm font-medium text-gray-900 dark:text-black">
+            <div class="inline-block relative">
+                <div class="flex flex-col gap-2">
+                    <label class="mr-3" for="enc_dec_method">Encrypt / Decrypt Method</label>
+                    <select id="enc_dec_method" name="enc_dec_method" class="block appearance-none bg-gray-200 border w-96 border-gray-400 hover:border-gray-500 px-2 py-1 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
+                        <option value="AES">AES</option>
+                        <option value="DES">DES</option>
+                        <option value="ARC4">ARC4</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:shadow-outline w-96">Submit</button>

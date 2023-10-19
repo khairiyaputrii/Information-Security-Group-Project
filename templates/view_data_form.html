@@ -12,38 +12,32 @@
         <div class="container mx-auto">
             <div class="flex justify-between items-center p-3">
                 <a href="#" class="text-white text-xl font-bold">Encrypted Data</a>
-                <div class="flex space-x-4"> <!-- Add a container for the buttons and apply space utility class -->
-                    <a href="{{ url_for('data_form') }}" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus:ring-blue-800 ml-2">Back to Data Form</a>
+                <div class="flex gap-3"> <!-- Add a container for the buttons and apply space utility class -->
+                    <a href="{{ url_for('data_form') }}" class="text-white bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Back to Data Form</a>
                     <form method="POST" action="/logout">
-                        <button type="submit" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center ml-4">Logout</button>
+                        <button type="submit" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Logout</button>
                     </form>
                 </div>
             </div>
         </div>
     </nav>    
-    <div class="ml-6 mt-6">
+    <div class="flex flex-col gap-5 justify-center items-center mt-16"> 
         <h1>View Encrypted Data</h1>
-    </div>
-    <div class="ml-6">
-        <form method="POST" action="{{ url_for('view_data') }}">
-            <div class="flex">
-                <select name="data_id" class="block appearance-none bg-gray-200 border border-gray-400 hover:border-gray-500 px-2 py-1 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
-                    <!-- Isi opsi dengan daftar ID data yang ingin dilihat -->
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <!-- Tambahkan lebih banyak opsi sesuai dengan data yang ada -->
-                </select>
-                <select name="encryption_method" class="block appearance-none bg-gray-200 border border-gray-400 hover:border-gray-500 px-2 py-1 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
-                    <option value="AES">AES</option>
-                    <option value="DES">DES</option>
-                    <option value="ARC4">ARC4</option>
-                </select>
-            </div>
+        <form method="POST" action="/view_data_form" class="flex flex-col">
+                <div class="block mb-5 text-sm font-medium text-gray-900 dark:text-black">
+                    <div class="flex flex-col gap-2">
+                        <label for="data_id">Choose Data ID</label>
+                        <select id="data_id" name="data_id" class="block appearance-none bg-gray-200 border border-gray-400 hover:border-gray-500 p-3 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">View</button>
         </form>
-    </div>
-    <br>
-    <div class="ml-6">
-        <input type="submit" value="View Data" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
     </div>
 </body>
 </html>
