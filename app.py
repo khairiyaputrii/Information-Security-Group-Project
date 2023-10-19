@@ -13,6 +13,7 @@ import moviepy.editor as mp
 import mysql.connector
 import os
 import io
+import time
 
 app = Flask(__name__)
 app.secret_key = 'secret_key_for_flash_messages'
@@ -138,25 +139,31 @@ def data_form():
         enc_dec_method = request.form['enc_dec_method']
         
         if enc_dec_method == 'AES':
+            start_time = time.perf_counter()
             iv = get_random_bytes(16)
             enc_full_name = encrypt_message_aes(aes_key, full_name, iv)
             enc_email = encrypt_message_aes(aes_key, email, iv)
             enc_phone_number = encrypt_message_aes(aes_key, phone_number, iv)
             enc_last_education = encrypt_message_aes(aes_key, last_education, iv)
+            end_time = time.perf_counter()
             enc_dec_key = aes_key
         if enc_dec_method == 'DES':
+            start_time = time.perf_counter()
             iv = get_random_bytes(8)
             enc_full_name = encrypt_message_des(des_key, full_name, iv)
             enc_email = encrypt_message_des(des_key, email, iv)
             enc_phone_number = encrypt_message_des(des_key, phone_number, iv)
             enc_last_education = encrypt_message_des(des_key, last_education, iv)
+            end_time = time.perf_counter()
             enc_dec_key = des_key
         if enc_dec_method == 'ARC4':
+            start_time = time.perf_counter()
             iv = None
             enc_full_name = encrypt_message_arc4(arc4_key, full_name)
             enc_email = encrypt_message_arc4(arc4_key, email)
             enc_phone_number = encrypt_message_arc4(arc4_key, phone_number)
             enc_last_education = encrypt_message_arc4(arc4_key, last_education)
+            end_time = time.perf_counter()
             enc_dec_key = arc4_key
         
         # ? Handle file uploads
@@ -188,8 +195,9 @@ def data_form():
         connection.commit()
         cursor.close()
         connection.close()
-
-        flash("Data submitted successfully!", "flash-success")
+        encryption_time = end_time - start_time
+        print(f"Encryption time using { enc_dec_method } : {encryption_time:.10f} seconds")
+        flash(f"Data submitted successfully! Encryption Time using { enc_dec_method } : {encryption_time:.10f} seconds", "flash-success")
 
     return render_template('data_form.html')
 
@@ -272,10 +280,10 @@ if __name__ == '__main__':
     # arc4_key = get_random_bytes(16)
     arc4_key = b'\x4a\x2d\x90\x8c\xce\xf4\x0b\x6f\xe0\x1a\x0e\x63\x17\x45\x98\xf2'
     
-    input_image_path = 'uploads/NaufalIhza/jersey-ori.jpeg'
-    encrypted_image_path = 'uploads/NaufalIhza/jersey-enc.enc'
-    decrypted_image_path = 'uploads/NaufalIhza/jersey-dec.jpeg'
-    encrypt_image_aes(input_image_path, encrypted_image_path, aes_key)
-    decrypt_image_aes(encrypted_image_path, decrypted_image_path, aes_key)
+    # input_image_path = 'uploads/NaufalIhza/jersey-ori.jpeg'
+    # encrypted_image_path = 'uploads/NaufalIhza/jersey-enc.jpeg'
+    # decrypted_image_path = 'uploads/NaufalIhza/jersey-dec.jpeg'
+    # encrypt_image_aes(input_image_path, encrypted_image_path, aes_key)
+    # decrypt_image_aes(encrypted_image_path, decrypted_image_path, aes_key)
 
     app.run(debug=True)

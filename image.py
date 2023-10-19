@@ -30,6 +30,6 @@ def decrypt_image_aes(encrypted_image_path, output_image_path, key):
 
     cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
     decrypted_data = unpad(cipher.decrypt(ciphertext), AES.block_size)
-    image_width, image_height = image.size
-    image = Image.frombytes("RGB", (image_width, image_height), decrypted_data)
+    image = Image.open(encrypted_image_path)
+    image = Image.frombytes("RGB", (image.size[0], image.size[1]), decrypted_data)
     image.save(output_image_path)
