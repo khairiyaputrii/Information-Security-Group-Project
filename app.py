@@ -7,7 +7,7 @@ from Crypto.Util.Padding import pad, unpad
 from PyPDF2 import PdfWriter, PdfReader
 from PIL import Image
 from meta import encrypt_message_aes, decrypt_message_aes, encrypt_message_des, decrypt_message_des, encrypt_message_arc4, decrypt_message_arc4
-from image import encrypt_image_file
+from image import encrypt_image_aes, decrypt_image_aes
 from video import encrypt_video_file
 from file import encrypt_pdf_file
 
@@ -169,41 +169,84 @@ def data_form():
         last_education = request.form['last_education']
         enc_dec_method = request.form['enc_dec_method']
         
+        
         if enc_dec_method == 'AES':
-            start_time = time.perf_counter()
+            # ? Generate a random initialization vector (IV)
             iv = get_random_bytes(16)
+            # ? Generate a random 256-bit (32-byte) AES key
+            aes_key = get_random_bytes(32)
+            
+            start_time_enc = time.perf_counter()
             enc_full_name = encrypt_message_aes(aes_key, full_name, iv)
             enc_email = encrypt_message_aes(aes_key, email, iv)
             enc_phone_number = encrypt_message_aes(aes_key, phone_number, iv)
             enc_last_education = encrypt_message_aes(aes_key, last_education, iv)
+            # img_enc = encrypt_image_aes('uploads/NaufalIhza/jersey-ori.jpeg', aes_key)
+            end_time_enc = time.perf_counter()
+
+            start_time_dec = time.perf_counter()
+            dec_full_name = decrypt_message_aes(aes_key, enc_full_name, iv)
+            dec_email = decrypt_message_aes(aes_key, enc_email, iv)
+            dec_phone_number = decrypt_message_aes(aes_key, enc_phone_number, iv)
+            dec_last_education = decrypt_message_aes(aes_key, enc_last_education, iv)
+            # img_dec = encrypt_image_aes('uploads/NaufalIhza/jersey-ori.jpeg', aes_key)
+            end_time_dec = time.perf_counter()
+
             # img_path = save_and_encrypt_file('img_upload', 'img', 'AES', iv)
             # pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', 'AES')
             # video_path = save_and_encrypt_file('video_upload', 'video', 'AES')
-            end_time = time.perf_counter()
+            
             enc_dec_key = aes_key
         if enc_dec_method == 'DES':
-            start_time = time.perf_counter()
+            # ? Generate a random initialization vector (IV)
             iv = get_random_bytes(8)
+            des_key = get_random_bytes(8)
+
+            start_time_enc = time.perf_counter()
             enc_full_name = encrypt_message_des(des_key, full_name, iv)
             enc_email = encrypt_message_des(des_key, email, iv)
             enc_phone_number = encrypt_message_des(des_key, phone_number, iv)
             enc_last_education = encrypt_message_des(des_key, last_education, iv)
+            # img_enc = encrypt_image_aes('uploads/NaufalIhza/jersey-ori.jpeg', aes_key)
+            end_time_enc = time.perf_counter()
+
+            start_time_dec = time.perf_counter()
+            dec_full_name = decrypt_message_des(des_key, enc_full_name, iv)
+            dec_email = decrypt_message_des(des_key, enc_email, iv)
+            dec_phone_number = decrypt_message_des(des_key, enc_phone_number, iv)
+            dec_last_education = decrypt_message_des(des_key, enc_last_education, iv)
+            # img_dec = encrypt_image_aes('uploads/NaufalIhza/jersey-ori.jpeg', aes_key)
+            end_time_dec = time.perf_counter()
+
             # img_path = save_and_encrypt_file('img_upload', 'img', 'DES')
             # pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', 'DES')
             # video_path = save_and_encrypt_file('video_upload', 'video', 'DES')
-            end_time = time.perf_counter()
+            
             enc_dec_key = des_key
         if enc_dec_method == 'ARC4':
-            start_time = time.perf_counter()
+            # ? ARC4 didn't need initialization vector (IV)
             iv = None
+            arc4_key = get_random_bytes(16)
+        
+            start_time_enc= time.perf_counter()
             enc_full_name = encrypt_message_arc4(arc4_key, full_name)
             enc_email = encrypt_message_arc4(arc4_key, email)
             enc_phone_number = encrypt_message_arc4(arc4_key, phone_number)
             enc_last_education = encrypt_message_arc4(arc4_key, last_education)
+            end_time_enc = time.perf_counter()
+
+            start_time_dec = time.perf_counter()
+            dec_full_name = decrypt_message_arc4(arc4_key, enc_full_name)
+            dec_email = decrypt_message_arc4(arc4_key, enc_email)
+            dec_phone_number = decrypt_message_arc4(arc4_key, enc_phone_number)
+            dec_last_education = decrypt_message_arc4(arc4_key, enc_last_education)
+            # img_dec = encrypt_image_aes('uploads/NaufalIhza/jersey-ori.jpeg', aes_key)
+            end_time_dec = time.perf_counter()
+
             # img_path = save_and_encrypt_file('img_upload', 'img', 'ARC4')
             # pdf_path = save_and_encrypt_file('pdf_upload', 'pdf', 'ARC4')
             # video_path = save_and_encrypt_file('video_upload', 'video', 'ARC4')
-            end_time = time.perf_counter()
+
             enc_dec_key = arc4_key
 
         connection = create_connection()
@@ -211,46 +254,55 @@ def data_form():
 
         insert_data_query = """
         INSERT INTO data (
+            user,
             iv,
             enc_dec_method,
             enc_dec_key,
             full_name,
-            enc_full_name,
             email,
-            enc_email,
             phone_number,
-            enc_phone_number,
             last_education,
-            enc_last_education
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            enc_full_name,
+            enc_email,
+            enc_phone_number,
+            enc_last_education,
+            dec_full_name,
+            dec_email,
+            dec_phone_number,
+            dec_last_education
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        data = (iv, enc_dec_method, enc_dec_key, full_name, enc_full_name, email, enc_email, phone_number, enc_phone_number, last_education, enc_last_education)
+        data = (username, iv, enc_dec_method, enc_dec_key, full_name, email, phone_number, last_education, 
+        enc_full_name, enc_email, enc_phone_number, enc_last_education, dec_full_name, dec_email, dec_phone_number, dec_last_education)
         cursor.execute(insert_data_query, data)
 
         connection.commit()
         cursor.close()
         connection.close()
-        encryption_time = end_time - start_time
-        print(f"Encryption time using { enc_dec_method } : {encryption_time:.10f} seconds")
-        flash(f"Data submitted successfully! Encryption Time using { enc_dec_method } : {encryption_time:.10f} seconds", "flash-success")
+
+        encryption_time = end_time_enc - start_time_enc
+        decryption_time = end_time_dec - start_time_dec
+
+        print(f"Using { enc_dec_method }, Encryption time : {encryption_time:.10f} sec, Decryption time : {decryption_time:.10f} sec")
+        flash(f"Data submitted successfully!\nUsing { enc_dec_method }, Encryption time : {encryption_time:.10f} sec, Decryption time : {decryption_time:.10f} sec", "flash-success")
 
     return render_template('data_form.html')
 
 # ? Route to decrypt and view submitted data
 
-@app.route('/view_data_form', methods=['GET', 'POST'])
-def view_data_form():
-    if 'username' not in session:
-        flash("You must log in first to access this page.", "flash-warning")
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        enc_data_id = request.form['data_id']
-        return redirect(url_for('view_data', data_id=enc_data_id))
+# @app.route('/view_data_form', methods=['GET', 'POST'])
+# def view_data_form():
+#     if 'username' not in session:
+#         flash("You must log in first to access this page.", "flash-warning")
+#         return redirect(url_for('login'))
+#     if request.method == 'POST':
+#         enc_data_id = request.form['data_id']
+#         return redirect(url_for('view_data', data_id=enc_data_id))
 
-    return render_template('view_data_form.html')
+#     return render_template('view_data_form.html')
 
-@app.route('/view_data/<int:data_id>')
-def view_data(data_id):
+@app.route('/view_data')
+def view_data():
     if 'username' not in session:
         flash("You must log in first to access this page.", "flash-warning")
         return redirect(url_for('login'))
@@ -258,62 +310,70 @@ def view_data(data_id):
     connection = create_connection()
     cursor = connection.cursor()
 
+    username = session['username']
+
+    # Mengambil enc_dec_method pertama dari data user
+    select_first_enc_dec_method_query = """ 
+        SELECT enc_dec_method
+        FROM data
+        WHERE user = %s
+        ORDER BY id ASC
+        LIMIT 1;
+    """
+    cursor.execute(select_first_enc_dec_method_query, (username,))
+    first_enc_dec_method = cursor.fetchone()
+
+    if first_enc_dec_method:
+        view_enc_dec_method = first_enc_dec_method[0]
+    else:
+        # Jika tidak ada data, maka default-kan ke 'AES'
+        view_enc_dec_method = 'AES'
+
     select_data_query = """ 
         SELECT
-            id,
+            user,
             iv,
             enc_dec_method,
             enc_dec_key,
             full_name,
-            enc_full_name,
             email,
-            enc_email,
             phone_number,
-            enc_phone_number,
             last_education,
-            enc_last_education
-        FROM data WHERE id = %s
+            enc_full_name,
+            enc_email,
+            enc_phone_number,
+            enc_last_education,
+            dec_full_name,
+            dec_email,
+            dec_phone_number,
+            dec_last_education
+        FROM data WHERE user = %s AND enc_dec_method = %s
     """
-    cursor.execute(select_data_query, (data_id,))
+    cursor.execute(select_data_query, (username, view_enc_dec_method))
     data = cursor.fetchone()
 
     cursor.close()
     connection.close()
 
     if data is None:
-        flash("Data with the selected ID does not exist.", "flash-warning")
-        return redirect(url_for('data_list')) 
+        flash("There is no data yet!", "flash-warning")
+        return redirect(url_for('data_form')) 
 
-    data_id, iv, enc_dec_method, enc_dec_key, full_name, enc_full_name, email, enc_email, phone_number, enc_phone_number, last_education, enc_last_education = data
+    user, iv, enc_dec_method, enc_dec_key, full_name, email, phone_number, last_education, enc_full_name, enc_email, enc_phone_number, enc_last_education, dec_full_name, dec_email, dec_phone_number, dec_last_education = data
 
-    if enc_dec_method == 'AES':
-        dec_full_name = decrypt_message_aes(aes_key, full_name.encode('utf-8'), iv)
-        dec_email = decrypt_message_aes(aes_key, email.encode('utf-8'), iv)
-        dec_phone_number = decrypt_message_aes(aes_key, phone_number.encode('utf-8'), iv)
-        dec_last_education = decrypt_message_aes(aes_key, last_education.encode('utf-8'), iv)
-    if enc_dec_method == 'DES':
-        dec_full_name = decrypt_message_des(des_key, full_name, iv)
-        dec_email = decrypt_message_des(des_key, email, iv)
-        dec_phone_number = decrypt_message_des(des_key, phone_number, iv)
-        dec_last_education = decrypt_message_des(des_key, last_education, iv)
-    if enc_dec_method == 'ARC4':
-        dec_full_name = decrypt_message_arc4(arc4_key, full_name)
-        dec_email = decrypt_message_arc4(arc4_key, email)
-        dec_phone_number = decrypt_message_arc4(arc4_key, phone_number)
-        dec_last_education = decrypt_message_arc4(arc4_key, last_education)
+    return render_template('view_data.html', enc_dec_method=enc_dec_method, enc_full_name=enc_full_name, dec_full_name=dec_full_name, dec_email=dec_email, dec_phone_number=dec_phone_number, dec_last_education=dec_last_education)
 
-    return render_template('view_data.html', data_id=data_id, full_name=full_name, dec_full_name=dec_full_name, email=email, dec_email=dec_email, phone_number=phone_number, dec_phone_number=dec_phone_number, last_education=last_education, dec_last_education=dec_last_education)
 
 if __name__ == '__main__':
     # ? Generate a random 256-bit (32-byte) AES key
     # aes_key = get_random_bytes(32)
-    aes_key = b'\x1a\xb2\x3c\xd4\x5e\x6f\x17\x88\x99\xaa\x0b\x4c\x1d\x6e\x7f\x30'
+    # aes_key = b"[\xcf\xe1\x9f\xb7\x87\xf9;5\x1d00F\xeb\x00\x92\xc1\xa2K\x0f\xab\xac\xa3r\xbe\x96\xf5\x19*\xba'\x18"
     # ? Generate a random 64-bit (8-byte) DES key
     # des_key = get_random_bytes(8)
-    des_key = b'\x01\x23\x45\x67\x89\xab\xcd\xef'
+    # des_key = b'P\xc1:\xba=\x1e\xd6X'
     # ? Generate a random 128-bit (16-byte) RC4 key
     # arc4_key = get_random_bytes(16)
-    arc4_key = b'\x4a\x2d\x90\x8c\xce\xf4\x0b\x6f\xe0\x1a\x0e\x63\x17\x45\x98\xf2'
+    # arc4_key = b'\x06\xe0\n\xb3\xe0[S\xac\xb8\xce\xc01\xc6\xf6\x97\x81'
     
     # input_image_path = 'uploads/NaufalIhza/jersey-ori.jpeg'
     # encrypted_image_path = 'uploads/NaufalIhza/jersey-enc.jpeg'

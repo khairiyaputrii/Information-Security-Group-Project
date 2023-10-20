@@ -14,12 +14,10 @@ import os
 # ! ENCRYPT DECRYPT
 
 def encrypt_message_aes(key, plaintext, iv):
-    # Generate a random initialization vector (IV)
-    # iv = get_random_bytes(16)
     # Konversi teks menjadi bytes
-    plaintext = plaintext.encode('utf-8')
+    plaintext_bytes = plaintext.encode('utf-8')
     # Pad the plaintext to be a multiple of 16 bytes (AES block size)
-    padded_plaintext = plaintext + (16 - len(plaintext) % 16) * b"\0"
+    padded_plaintext = pad(plaintext_bytes, AES.block_size)
     # Create an AES cipher object in CBC mode with the given key and IV
     cipher = AES.new(key, AES.MODE_CBC, iv)
     # Encrypt the padded plaintext
@@ -28,21 +26,16 @@ def encrypt_message_aes(key, plaintext, iv):
     return ciphertext
 
 def decrypt_message_aes(key, ciphertext, iv):
-    # Extract the IV from the ciphertext
-    # iv = ciphertext[:16]
     # Create an AES cipher object in CBC mode with the given key and IV
     cipher = AES.new(key, AES.MODE_CBC, iv)
     # Decrypt the ciphertext
-    # plaintext = cipher.decrypt(ciphertext[16:])
-    plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
-    # Remove the padding to get the original plaintext
-    # plaintext = plaintext.rstrip(b"\0")
+    decrypted_data = cipher.decrypt(ciphertext[16:])  # Exclude the IV
+    # Unpad the decrypted data to get the original plaintext
+    plaintext = unpad(decrypted_data, AES.block_size)
     
     return plaintext.decode('utf-8')
 
 def encrypt_message_des(key, plaintext, iv):
-    # Generate a random initialization vector (IV)
-    # iv = get_random_bytes(8)
     # Konversi teks menjadi bytes
     plaintext = plaintext.encode('utf-8')
     # Pad the plaintext to be a multiple of 8 bytes (DES block size)
@@ -55,8 +48,6 @@ def encrypt_message_des(key, plaintext, iv):
     return ciphertext
 
 def decrypt_message_des(key, ciphertext, iv):
-    # Extract the IV from the ciphertext
-    # iv = ciphertext[:8]
     # Create a DES cipher object in CBC mode with the given key and IV
     cipher = DES.new(key, DES.MODE_CBC, iv)
     # Decrypt the ciphertext

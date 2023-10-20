@@ -12,12 +12,42 @@ import moviepy.editor as mp
 import mysql.connector
 import os
 
-def encrypt_image_file(image_file_path, key, iv):
-    image = Image.open(image_file_path)
-    image = image.convert("RGB")
-    encrypted_data = encrypt_message_aes(key, image.tobytes(), iv)
-    with open(image_file_path, "wb") as output:
-        output.write(encrypted_data)
+# def encrypt_image_file(image_file_path, key, iv):
+#     image = Image.open(image_file_path)
+#     image = image.convert("RGB")
+#     encrypted_data = encrypt_message_aes(key, image.tobytes(), iv)
+#     with open(image_file_path, "wb") as output:
+#         output.write(encrypted_data)
+
+
+def encrypt_image_aes(file_name, key):
+    # Open the image file in binary mode
+    with open(file_name, 'rb') as f:
+        data = f.read()
+
+    # Create a new AES cipher object
+    cipher = AES.new(key, AES.MODE_EAX)
+    # Encrypt the data
+    ciphertext, tag = cipher.encrypt_and_digest(data)
+
+    # Write the encrypted data to a new file
+    with open(file_name + ".enc", 'wb') as f:
+        [f.write(x) for x in (cipher.nonce, tag, ciphertext)]
+
+def decrypt_image_aes(file_name, key):
+    # Open the encrypted file in binary mode
+    with open(file_name, 'rb') as f:
+        nonce, tag, ciphertext = [f.read(x) for x in (16, 16, -1)]
+
+    # Create a new AES cipher object
+    cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
+
+    # Decrypt the data
+    data = cipher.decrypt_and_verify(ciphertext, tag)
+
+    # Write the decrypted data to a new file
+    with open(file_name.replace(".enc", ""), 'wb') as f:
+        f.write(data)
 
 # def encrypt_image_aes(input_image_path, output_image_path, key):
 #     image = Image.open(input_image_path)
