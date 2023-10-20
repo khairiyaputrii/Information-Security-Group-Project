@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
 from werkzeug.utils import secure_filename  # Add this import
 from Crypto.Cipher import AES
@@ -64,13 +65,85 @@ def decrypt_message_aes(ciphertext, iv, key):
 
 >>>>>>> Stashed changes
 # Redirect the root URL to the login page
+=======
+from werkzeug.utils import secure_filename
+from Crypto.Random import get_random_bytes
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
+from meta import encrypt_message_aes, encrypt_message_des, encrypt_message_arc4
+from image import encrypt_image_file
+from video import encrypt_video_file
+from file import encrypt_pdf_file
+import mysql.connector
+import os
+import time
+
+app = Flask(__name__)
+app.secret_key = 'secret_key_for_flash_messages'
+app.config['UPLOAD_FOLDER'] = 'uploads'
+ALLOWED_EXTENSIONS = {'pdf', 'jpeg', 'jpg', 'png', 'mp4'}
+
+db_config = {
+    'host': '127.0.0.1',
+    'user': 'root',
+    'password': 'danindra123',
+    'database': 'keamananinf',
+    'charset': 'utf8mb4',
+    'collation': 'utf8mb4_unicode_ci',
+    'connection_timeout': 300
+}
+
+def create_connection():
+    return mysql.connector.connect(**db_config)
+
+def allowed_file(filename, encryption_method):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def get_encryption_key(encryption_method):
+    if encryption_method == 'AES':
+        key_length = 16 
+        return get_random_bytes(key_length)
+    else:
+        # Add conditions for other encryption methods if needed
+        raise ValueError("Unsupported encryption method")
+
+
+def decrypt_message_aes(key, encrypted_message, iv):
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    decrypted_message = unpad(cipher.decrypt(encrypted_message), AES.block_size).decode('utf-8')
+    return decrypted_message
+
+def save_and_encrypt_file(file_key, encryption_method, iv):
+    file = request.files[file_key]
+    if file and allowed_file(file.filename, encryption_method):
+        file_folder = os.path.join(app.config['UPLOAD_FOLDER'], session['username'])
+        os.makedirs(file_folder, exist_ok=True)
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(file_folder, filename)
+        file.save(file_path)
+
+        key = get_encryption_key(encryption_method)
+
+        if encryption_method == 'pdf':
+            encrypt_pdf_file(file_path, key)
+        elif encryption_method == 'img':
+            encrypt_image_file(file_path, key, iv)
+        elif encryption_method == 'video':
+            encrypt_video_file(file_path, key)
+
+        return file_path
+
+>>>>>>> Stashed changes
 @app.route('/')
 def root():
     return redirect(url_for('login'))
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
 # Route for logging out
+=======
+>>>>>>> Stashed changes
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     if 'username' in session:
@@ -78,8 +151,11 @@ def logout():
         flash('Anda telah berhasil logout.', 'flash-warning')
     return redirect(url_for('login'))
 
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 # Route for the login page
+=======
+>>>>>>> Stashed changes
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -89,7 +165,10 @@ def login():
         connection = create_connection()
         cursor = connection.cursor()
 
+<<<<<<< Updated upstream
         # Change to the appropriate table and column names in your database
+=======
+>>>>>>> Stashed changes
         query = "SELECT username, password FROM user WHERE username = %s"
         cursor.execute(query, (username,))
         result = cursor.fetchone()
@@ -106,7 +185,10 @@ def login():
     
     return render_template('login.html')
 
+<<<<<<< Updated upstream
 # Route for the registration page
+=======
+>>>>>>> Stashed changes
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -140,12 +222,15 @@ def register():
 
     return render_template('register.html')
 
+<<<<<<< Updated upstream
 # Route for the welcome page
 @app.route('/welcome')
 def welcome():
     return 'Selamat datang di aplikasi!'
 
 # Route for the data submission form page (only accessible after login)
+=======
+>>>>>>> Stashed changes
 @app.route('/data_form', methods=['GET', 'POST'])
 def data_form():
     print(request.form)
@@ -157,10 +242,19 @@ def data_form():
 >>>>>>> Stashed changes
         return redirect(url_for('login'))
 
+<<<<<<< Updated upstream
     # Retrieve the username from the session
+=======
+>>>>>>> Stashed changes
     username = session['username']
 
     if request.method == 'POST':
+<<<<<<< Updated upstream
+=======
+        app.config['UPLOAD_FOLDER'] = f'uploads/{username}'
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        
+>>>>>>> Stashed changes
         full_name = request.form['full_name']
         email = request.form['email']
 <<<<<<< Updated upstream
@@ -169,6 +263,7 @@ def data_form():
 =======
         phone_number = request.form['phone_number']
         last_education = request.form['last_education']
+<<<<<<< Updated upstream
 
         # EAS Encrypt Method
         eas_key = get_random_bytes(32)
@@ -185,11 +280,25 @@ def data_form():
         img_path = save_file('img_upload', 'img')
         video_path = save_file('video_upload', 'video')
 >>>>>>> Stashed changes
+=======
+        enc_dec_method = request.form['enc_dec_method']
+        
+        start_time = time.perf_counter()
+
+        iv = get_random_bytes(16)
+        enc_full_name = encrypt_message_aes(get_encryption_key('AES'), full_name, iv)
+        enc_email = encrypt_message_aes(get_encryption_key('AES'), email, iv)
+        enc_phone_number = encrypt_message_aes(get_encryption_key('AES'), phone_number, iv)
+        enc_last_education = encrypt_message_aes(get_encryption_key('AES'), last_education, iv)
+
+        end_time = time.perf_counter()
+>>>>>>> Stashed changes
 
         connection = create_connection()
         cursor = connection.cursor()
 
         insert_data_query = """
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         INSERT INTO data (nama_lengkap, email, no_telepon, pendidikan)
         VALUES (%s, %s, %s, %s)
@@ -201,20 +310,43 @@ def data_form():
         """
         data = (full_name, enc_full_name, eas_key, email, phone_number, last_education, pdf_path, img_path, video_path)
 >>>>>>> Stashed changes
+=======
+        INSERT INTO data_form 
+        (full_name, enc_full_name, email, enc_email, phone_number, enc_phone_number, last_education, enc_last_education, enc_dec_method, enc_dec_key) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        data = (
+            full_name,
+            enc_full_name,
+            email,
+            enc_email,
+            phone_number,
+            enc_phone_number,
+            last_education,
+            enc_last_education,
+            enc_dec_method,
+            get_encryption_key(enc_dec_method)
+        )
+>>>>>>> Stashed changes
         cursor.execute(insert_data_query, data)
-
         connection.commit()
+
         cursor.close()
         connection.close()
+<<<<<<< Updated upstream
 
 <<<<<<< Updated upstream
         flash('Data berhasil disubmit!', 'success')
 =======
         flash('Data submitted successfully!', 'flash-success')
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
-    return render_template('data_form.html')
+        flash("Data submitted successfully.", "flash-success")
+        flash(f"Encryption time: {end_time - start_time:.6f} seconds.", "flash-info")
 
+<<<<<<< Updated upstream
 # Function to save uploaded files
 def save_file(file_key, file_type):
     file = request.files[file_key]
@@ -234,3 +366,71 @@ def allowed_file(filename, file_type):
 
 if __name__ == '__main__':
     app.run(debug=True)
+=======
+    return render_template('data_form.html', username=username, enc_full_name=enc_full_name, enc_email=enc_email, enc_phone_number=enc_phone_number, enc_last_education=enc_last_education)
+
+@app.route('/view_data_form', methods=['GET', 'POST'])
+def view_data_form():
+    if 'username' not in session:
+        flash("You must log in first to access this page.", "flash-warning")
+        return redirect(url_for('login'))
+
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    if request.method == 'POST':
+        data_id = request.form.get('data_id')
+        query = "SELECT * FROM data_form WHERE id = %s"
+        cursor.execute(query, (data_id,))
+        result = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if result:
+            # Dekripsi nilai yang diambil dari database
+            dec_full_name = decrypt_message_aes(result[9], result[1], result[10])
+            dec_email = decrypt_message_aes(result[9], result[3], result[11])
+            dec_phone_number = decrypt_message_aes(result[9], result[5], result[12])
+            dec_last_education = decrypt_message_aes(result[9], result[7], result[13])
+
+            # Kirim data ke template
+            return render_template(
+                'view_data_form.html',
+                data=result,
+                dec_full_name=dec_full_name,
+                dec_email=dec_email,
+                dec_phone_number=dec_phone_number,
+                dec_last_education=dec_last_education
+            )
+        else:
+            flash("Data not found.", "flash-error")
+            return redirect(url_for('data_form'))
+
+    # Jika metode adalah GET, tampilkan formulir atau lakukan hal lain sesuai kebutuhan
+    # ...
+
+    return render_template('view_data_form.html')
+        
+@app.route('/upload_file', methods=['POST'])
+def upload_file():
+    if 'username' not in session:
+        flash("You must log in first to access this page.", "flash-warning")
+        return redirect(url_for('login'))
+
+    username = session['username']
+    enc_dec_method = request.form['enc_dec_method']
+    encryption_method = request.form['encryption_method']
+
+    if 'file' not in request.files:
+        flash("No file part.", "flash-error")
+        return redirect(request.url)
+
+    file_path = save_and_encrypt_file('file', encryption_method, get_random_bytes(16))
+    flash(f"File uploaded and encrypted successfully. Path: {file_path}", "flash-success")
+
+    return redirect(url_for('data_form'))
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=8080)
+>>>>>>> Stashed changes
