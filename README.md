@@ -47,7 +47,6 @@ In summary, AES is a highly secure and efficient encryption standard that is wid
 ## Example
 Here are some of the examples from our codes, which includes the original input, encrypted data, and decrypted daya.
 ![example1](images/example1.jpg)
-![example2](images/example1.jpg)
 
 ## Why those datas?
 We consider full names, email addresses, phone numbers, last education details, PDF files, pictures, and videos as private data primarily due to their personal and sensitive nature. Full names, email addresses, and phone numbers are unique identifiers linked to individuals and can be used for identity theft, spam, or unauthorized contact. Last education information may contain personal history and qualifications that individuals may not want to disclose publicly. PDF files, pictures, and videos can contain personal or confidential content, making them sensitive and subject to privacy concerns. Protecting this data helps safeguard individuals' personal information and ensures privacy and security.
