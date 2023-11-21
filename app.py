@@ -22,7 +22,7 @@ import time
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
-    'password': '',
+    'password': 'danindra123',
     'database': 'informationsecurity',
     'charset': 'utf8mb4',
     'connection_timeout': 300
@@ -107,7 +107,7 @@ def register():
             hashed_password = generate_password_hash(password)
 
             insert_user_query = "INSERT INTO users (username, password,	keyAES, keyDES, keyARC4) VALUES (%s, %s, %s, %s, %s)"
-            cursor.execute(insert_user_query, (username, hashed_password, aes_key, des_key, arc4_key))
+            cursor.execute(insert_user_query, (username, hashed_password, bytes(aes_key), bytes(des_key), bytes(arc4_key)))
 
             connection.commit()
             cursor.close()
