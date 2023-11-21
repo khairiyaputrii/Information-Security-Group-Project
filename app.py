@@ -22,7 +22,7 @@ import time
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
-    'password': 'danindra123',
+    'password': '',
     'database': 'informationsecurity',
     'charset': 'utf8mb4',
     'connection_timeout': 300
@@ -144,23 +144,49 @@ def data_form():
         result = cursor.fetchall()
 
         if result:
-            user_id, keyAES, keyDES, keyARC4 = result
+            print(result)
+            user_data = result[0]
+            user_id, keyAES, keyDES, keyARC4 = user_data
+
 
             fullnameAES = encrypt_message_aes(keyAES, full_name)
             fullnameDES = encrypt_message_des(keyDES, full_name)
             fullnameARC4 = encrypt_message_arc4(keyARC4, full_name)
             end_time_enc = time.perf_counter()
 
-            insert_data_query = """
-            INSERT INTO fullnames (
-                fullnameAES,
-                fullnameDES,
-                fullnameARC4,
-                user_id
-            ) VALUES (%s, %s, %s, %s)
-            """
-            data = (fullnameAES, fullnameDES, fullnameARC4, user_id)
-            cursor.execute(insert_data_query, data)
+            cursor.execute("SELECT id FROM fullnames WHERE user_id = %s", (user_id,))
+            existing_data = cursor.fetchone()
+
+            # insert_data_query = """
+            # INSERT INTO fullnames (
+            #     fullnameAES,
+            #     fullnameDES,
+            #     fullnameARC4,
+            #     user_id
+            # ) VALUES (%s, %s, %s, %s)
+            # """
+            # data = (fullnameAES, fullnameDES, fullnameARC4, user_id)
+            # cursor.execute(insert_data_query, data)
+
+            if existing_data:
+                update_data_query = """
+                UPDATE fullnames
+                SET fullnameAES = %s, fullnameDES = %s, fullnameARC4 = %s
+                WHERE user_id = %s
+                """
+                update_data = (fullnameAES, fullnameDES, fullnameARC4, user_id)
+                cursor.execute(update_data_query, update_data)
+            else:
+                insert_data_query = """
+                INSERT INTO fullnames (
+                    fullnameAES,
+                    fullnameDES,
+                    fullnameARC4,
+                    user_id
+                ) VALUES (%s, %s, %s, %s)
+                """
+                data = (fullnameAES, fullnameDES, fullnameARC4, user_id)
+                cursor.execute(insert_data_query, data)
 
             connection.commit()
 
@@ -169,8 +195,7 @@ def data_form():
             encryption_time = end_time_enc - start_time_enc
             decryption_time = end_time_dec - end_time_enc
 
-            print(f"Using {enc_dec_method}, Encryption time : {encryption_time:.10f} sec, Decryption time : {decryption_time:.10f} sec")
-            flash(f"Data submitted successfully!\nUsing {enc_dec_method}, Encryption time : {encryption_time:.10f} sec, Decryption time : {decryption_time:.10f} sec", "flash-success")
+            flash(f"Data submitted successfully!\n Encryption time : {encryption_time:.10f} sec, Decryption time : {decryption_time:.10f} sec", "flash-success")
 
         cursor.close()
         connection.close()
