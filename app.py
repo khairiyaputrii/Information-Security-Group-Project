@@ -131,10 +131,9 @@ def data_form():
 
     if request.method == 'POST':
         full_name = request.form['full_name']
-        # email = request.form['email']
-        # phone_number = request.form['phone_number']
-        # last_education = request.form['last_education']
-        # enc_dec_method = request.form['enc_dec_method']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        last_education = request.form['last_education']
 
         connection = create_connection()
         cursor = connection.cursor()
@@ -152,23 +151,24 @@ def data_form():
             fullnameAES = encrypt_message_aes(keyAES, full_name)
             fullnameDES = encrypt_message_des(keyDES, full_name)
             fullnameARC4 = encrypt_message_arc4(keyARC4, full_name)
+            emailAES = encrypt_message_aes(keyAES, email)
+            emailDES = encrypt_message_des(keyDES, email)
+            emailARC4 = encrypt_message_arc4(keyARC4, email)
+            phonenumberAES = encrypt_message_aes(keyAES, phone_number)
+            phonenumberDES = encrypt_message_des(keyDES, phone_number)
+            phonenumberARC4 = encrypt_message_arc4(keyARC4, phone_number)
+            lasteducationAES = encrypt_message_aes(keyAES, last_education)
+            lasteducationDES = encrypt_message_des(keyDES, last_education)
+            lasteducationARC4 = encrypt_message_arc4(keyARC4, last_education)
+
             end_time_enc = time.perf_counter()
 
+            # CHECK DATA EXISTANCE
             cursor.execute("SELECT id FROM fullnames WHERE user_id = %s", (user_id,))
             existing_data = cursor.fetchone()
 
-            # insert_data_query = """
-            # INSERT INTO fullnames (
-            #     fullnameAES,
-            #     fullnameDES,
-            #     fullnameARC4,
-            #     user_id
-            # ) VALUES (%s, %s, %s, %s)
-            # """
-            # data = (fullnameAES, fullnameDES, fullnameARC4, user_id)
-            # cursor.execute(insert_data_query, data)
-
             if existing_data:
+                # FULLNAMES
                 update_data_query = """
                 UPDATE fullnames
                 SET fullnameAES = %s, fullnameDES = %s, fullnameARC4 = %s
@@ -176,7 +176,32 @@ def data_form():
                 """
                 update_data = (fullnameAES, fullnameDES, fullnameARC4, user_id)
                 cursor.execute(update_data_query, update_data)
+                # EMAILS
+                update_data_query = """
+                UPDATE emails
+                SET emailAES = %s, emailDES = %s, emailARC4 = %s
+                WHERE user_id = %s
+                """
+                update_data = (emailAES, emailDES, emailARC4, user_id)
+                cursor.execute(update_data_query, update_data)
+                # PHONENUMBERS
+                update_data_query = """
+                UPDATE phonenumbers
+                SET phonenumberAES = %s, phonenumberDES = %s, phonenumberARC4 = %s
+                WHERE user_id = %s
+                """
+                update_data = (phonenumberAES, phonenumberDES, phonenumberARC4, user_id)
+                cursor.execute(update_data_query, update_data)
+                # LASTEDUCATIONS
+                update_data_query = """
+                UPDATE lasteducations
+                SET lasteducationAES = %s, lasteducationDES = %s, lasteducationARC4 = %s
+                WHERE user_id = %s
+                """
+                update_data = (lasteducationAES, lasteducationDES, lasteducationARC4, user_id)
+                cursor.execute(update_data_query, update_data)
             else:
+                # FULLNAMES
                 insert_data_query = """
                 INSERT INTO fullnames (
                     fullnameAES,
@@ -186,6 +211,39 @@ def data_form():
                 ) VALUES (%s, %s, %s, %s)
                 """
                 data = (fullnameAES, fullnameDES, fullnameARC4, user_id)
+                cursor.execute(insert_data_query, data)
+                # EMAILS
+                insert_data_query = """
+                INSERT INTO emails (
+                    emailAES,
+                    emailDES,
+                    emailARC4,
+                    user_id
+                ) VALUES (%s, %s, %s, %s)
+                """
+                data = (emailAES, emailDES, emailARC4, user_id)
+                cursor.execute(insert_data_query, data)
+                # PHONENUMBERS
+                insert_data_query = """
+                INSERT INTO phonenumbers (
+                    phonenumberAES,
+                    phonenumberDES,
+                    phonenumberARC4,
+                    user_id
+                ) VALUES (%s, %s, %s, %s)
+                """
+                data = (phonenumberAES, phonenumberDES, phonenumberARC4, user_id)
+                cursor.execute(insert_data_query, data)
+                # LASTEDUCATIONS
+                insert_data_query = """
+                INSERT INTO lasteducations (
+                    lasteducationAES,
+                    lasteducationDES,
+                    lasteducationARC4,
+                    user_id
+                ) VALUES (%s, %s, %s, %s)
+                """
+                data = (lasteducationAES, lasteducationDES, lasteducationARC4, user_id)
                 cursor.execute(insert_data_query, data)
 
             connection.commit()
