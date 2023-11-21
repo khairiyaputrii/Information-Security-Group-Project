@@ -34,75 +34,56 @@
     </nav>
     <div class="flex flex-col gap-5 justify-center items-center mt-16">
       <div
-        class="blocktext-sm font-medium text-yellow-500 px-4 py-3 rounded-lg flex flex-col gap-2 bg-yellow-200 border-2 border-yellow-500"
+        class="flex flex-col gap-2 text-center border p-5 rounded-lg shadow-lg"
       >
-        <label class="" for="enc_dec_method"
-          >Choose Encrypt / Decrypt Method</label
+        <p
+          class="bg-green-200 border-2 border-green-700 text-green-700 text-center font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
         >
-        <form action="POST" class="flex justify-center gap-3 text-black">
-          <div class="inline-block relative flex flex-col gap-2">
-            <select
-              id="view_enc_dec_method"
-              name="enc_dec_method"
-              class="text-center block appearance-none bg-gray-200 border w-fit border-gray-400 hover:border-gray-500 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-              required
-            >
-              <option value="AES">AES</option>
-              <option value="DES">DES</option>
-              <option value="ARC4">ARC4</option>
-            </select>
-          </div>
-          <button
-            type="submit"
-            class="text-center text-black block appearance-none bg-gray-200 border w-fit border-gray-400 hover:border-gray-500 rounded shadow leading-tight focus:outline-none focus:shadow-outline px-4"
-          >
-            Submit
-          </button>
-        </form>
+          AES
+        </p>
+        <div class="py-2 px-4 bg-gray-200 rounded-lg text-left">
+          <p><span class="font-bold">Full Name :</span> {{ full_name_aes }}</p>
+          <p><span class="font-bold">Email :</span> {{ email_aes }}</p>
+          <p><span class="font-bold">Phone Number :</span> {{ phone_number_aes }}</p>
+          <p><span class="font-bold">Last Education :</span> {{ last_education_aes }}</p>
+        </div>
       </div>
-      <div class="flex flex-col gap-2 text-center border p-5 rounded-lg shadow-lg">
-        <p class="block text-xl font-medium text-gray-900 dark:text-black">
-          {{ enc_dec_method }}
-        </p>
-        <p class="block text-sm font-medium text-gray-900 dark:text-black">
-          Full Name
-        </p>
-        <div class="py-2 px-4 bg-gray-200 rounded-lg text-left">
-          <p><span class="font-bold">Encryption :</span> {{ enc_full_name }}</p>
-          <p><span class="font-bold">Decryption :</span> {{ dec_full_name }}</p>
-        </div>
-        <p class="block text-sm font-medium text-gray-900 dark:text-black">
-          Email
+      <div
+        class="flex flex-col gap-2 text-center border p-5 rounded-lg shadow-lg"
+      >
+        <p
+          class="bg-green-200 border-2 border-green-700 text-green-700 text-center font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
+        >
+          DES
         </p>
         <div class="py-2 px-4 bg-gray-200 rounded-lg text-left">
-          <p><span class="font-bold">Encryption :</span> {{ enc_email }}</p>
-          <p><span class="font-bold">Decryption :</span> {{ dec_email }}</p>
+          <p><span class="font-bold">Full Name :</span> {{ full_name_des }}</p>
+          <p><span class="font-bold">Email :</span> {{ email_des }}</p>
+          <p><span class="font-bold">Phone Number :</span> {{ phone_number_des }}</p>
+          <p><span class="font-bold">Last Education :</span> {{ last_education_des }}</p>
         </div>
-        <p class="block text-sm font-medium text-gray-900 dark:text-black">
-          Phone Number
+      </div>
+      <div
+        class="flex flex-col gap-2 text-center border p-5 rounded-lg shadow-lg"
+      >
+        <p
+          class="bg-green-200 border-2 border-green-700 text-green-700 text-center font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
+        >
+          ARC4
         </p>
         <div class="py-2 px-4 bg-gray-200 rounded-lg text-left">
-          <p>
-            <span class="font-bold">Encryption :</span> {{ enc_phone_number }}
-          </p>
-          <p>
-            <span class="font-bold">Decryption :</span> {{ dec_phone_number }}
-          </p>
+          <p><span class="font-bold">Full Name :</span> {{ full_name_arc4 }}</p>
+          <p><span class="font-bold">Email :</span> {{ email_arc4 }}</p>
+          <p><span class="font-bold">Phone Number :</span> {{ phone_number_arc4 }}</p>
+          <p><span class="font-bold">Last Education :</span> {{ last_education_arc4 }}</p>
         </div>
-        <p class="block text-sm font-medium text-gray-900 dark:text-black">
-          Last Education
-        </p>
-        <div class="py-2 px-4 bg-gray-200 rounded-lg text-left">
-          <p>
-            <span class="font-bold">Encryption :</span> {{ enc_last_education }}
-          </p>
-          <p>
-            <span class="font-bold">Decryption :</span> {{ dec_last_education }}
-          </p>
-        </div>
+      </div>
+      <div
+        class="flex flex-col gap-2 text-center border p-5 rounded-lg shadow-lg"
+      >
         <a
           href="{{ url_for('data_form') }}"
-          class="mt-5 bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none focus:shadow-outline w-full"
+          class="bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none focus:shadow-outline w-full"
           >Back</a
         >
       </div>
