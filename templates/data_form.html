@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-    </nav>    
+    </nav>
     <form method="POST" action="/data_form" class="flex flex-col justify-center items-center mt-16" enctype="multipart/form-data">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -39,6 +39,9 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
+        <div>
+            <h1 class="font-bold text-2xl pb-10">FILL ACCOUNT DATA</h1>
+        </div>
         <div>
             <label for="full_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Full Name</label>
             <input type="text" id="full_name" name="full_name" class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="Enter your full name here">
@@ -60,7 +63,7 @@
             <div class="inline-block relative">
                 <div class="flex flex-col gap-2">
                     <label class="mr-3" for="last_education">Last Education</label>
-                    <select id="last_education" name="last_education" class="block appearance-none bg-gray-200 border w-96 border-gray-400 hover:border-gray-500 px-2 py-1 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
+                    <select id="last_education" name="last_education" class="block appearance-none bg-gray-200 border w-96 border-red-500 px-4 py-3 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
                         <option value="SD">SD</option>
                         <option value="SMP">SMP</option>
                         <option value="SMA">SMA</option>
@@ -71,39 +74,7 @@
                 </div>
             </div>
         </div>
-         
-        <!-- Add a file input field for PDF upload with a maximum size of 5MB -->
-        <!-- <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
-            <label for="pdf_upload">Upload PDF (max 5MB)</label>
-            <input type="file" id="pdf_upload" name="pdf_upload" accept=".pdf" required>
-        </div> -->
-
-        <!-- Add a file input field for Image upload with a maximum size of 10MB -->
-        <!-- <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
-            <label for="img_upload">Upload Image (max 10MB):</label>
-            <input type="file" id="img_upload" name="img_upload" accept=".jpeg" required>
-        </div> -->
-
-        <!-- Add a file input field for Video upload with a maximum size of 15MB -->
-        <!-- <div class="flex flex-col gap-2 block mb-5 w-96 text-sm font-medium text-gray-900 dark:text-black">
-            <label for="video_upload">Upload Video (max 15MB):</label>
-            <input type="file" id="video_upload" name="video_upload" accept=".mp4" required>
-        </div> -->
-
-        <!-- <div class="block mb-5 text-sm font-medium text-gray-900 dark:text-black">
-            <div class="inline-block relative">
-                <div class="flex flex-col gap-2">
-                    <label class="mr-3" for="enc_dec_method">Encrypt / Decrypt Method</label>
-                    <select id="enc_dec_method" name="enc_dec_method" class="block appearance-none bg-gray-200 border w-96 border-gray-400 hover:border-gray-500 px-2 py-1 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
-                        <option value="AES">AES</option>
-                        <option value="DES">DES</option>
-                        <option value="ARC4">ARC4</option>
-                    </select>
-                </div>
-            </div>
-        </div> -->
-
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:shadow-outline w-96">Submit</button>
+        <button type="submit" class="bg-blue-500 border-2 border-blue-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-lg focus:outline-none focus:shadow-outline w-96">Submit</button>
     </form>
 
     <script>
