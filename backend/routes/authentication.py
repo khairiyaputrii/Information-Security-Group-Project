@@ -1,6 +1,10 @@
 from flask import Blueprint, Flask, render_template, request, redirect, url_for, flash, session
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from backend.database.db import create_connection
+from Cryptodome.Random import get_random_bytes
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.backends import default_backend
 
 authentication = Blueprint("authentication", __name__)
 
@@ -52,6 +56,26 @@ def register():
         des_key = get_random_bytes(8)
         arc4_key = get_random_bytes(16)
 
+        # Generate RSA key pair
+        key_size = 2048
+        private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=key_size,
+            backend=default_backend()
+        )
+        public_key = private_key.public_key()
+
+        # Serialize keys to PEM format
+        private_key_pem = private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+        public_key_pem = public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+
         connection = create_connection()
         cursor = connection.cursor()
 
@@ -66,7 +90,10 @@ def register():
         else:
             hashed_password = generate_password_hash(password)
 
-            insert_user_query = "INSERT INTO users (username, password,	keyAES, keyDES, keyARC4) VALUES (%s, %s, %s, %s, %s)"
+            insert_user_query = """
+                INSERT INTO users (username, password, keyAES, keyDES, keyARC4, keyAsyPublic, keyAsyPrivate)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """
             cursor.execute(
                 insert_user_query,
                 (
@@ -75,6 +102,8 @@ def register():
                     bytes(aes_key),
                     bytes(des_key),
                     bytes(arc4_key),
+                    public_key_pem,
+                    private_key_pem,
                 ),
             )
 
@@ -86,4 +115,3 @@ def register():
             return redirect(url_for("authentication.login"))
 
     return render_template("register.html")
-
