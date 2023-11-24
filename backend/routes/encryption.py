@@ -1,7 +1,7 @@
 from flask import Blueprint, Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import check_password_hash
 from backend.database.db import create_connection
-from backend.function.meta import (
+from backend.functions.meta import (
     encrypt_message_aes,
     decrypt_message_aes,
     encrypt_message_des,

@@ -6,8 +6,6 @@ from Cryptodome.Random import get_random_bytes
 from Cryptodome.Util.Padding import pad, unpad
 from PyPDF2 import PdfWriter, PdfReader
 from PIL import Image
-from video import encrypt_video_file
-from file import encrypt_pdf_file
 import moviepy.editor as mp
 import os
 import io
