@@ -2,15 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from Cryptodome.Cipher import AES, DES, ARC4
-# from Cryptodome.Random import get_random_bytes
 from Cryptodome.Util.Padding import pad, unpad
-# from PIL import Image
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
 from base64 import b64encode, b64decode, standard_b64decode, standard_b64encode
 
-# import moviepy.editor as mp
 import mysql.connector
 import os
 

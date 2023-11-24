@@ -16,7 +16,7 @@
           <p class="text-white text-xl font-bold">View Data</p>
           <div class="flex gap-3">
             <a
-              href="{{ url_for('data_form') }}"
+              href="{{ url_for('encryption.data_form') }}"
               class="text-white bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >Back to Data Form</a
             >
@@ -77,15 +77,6 @@
           <p><span class="font-bold">Phone Number :</span> {{ phone_number_arc4 }}</p>
           <p><span class="font-bold">Last Education :</span> {{ last_education_arc4 }}</p>
         </div>
-      </div>
-      <div
-        class="flex flex-col gap-2 text-center border p-5 rounded-lg shadow-lg"
-      >
-        <a
-          href="{{ url_for('data_form') }}"
-          class="bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none focus:shadow-outline w-full"
-          >Back</a
-        >
       </div>
     </div>
   </body>

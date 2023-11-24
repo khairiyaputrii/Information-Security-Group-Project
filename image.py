@@ -5,7 +5,6 @@ from Cryptodome.Cipher import AES, DES, ARC4
 from Cryptodome.Random import get_random_bytes
 from Cryptodome.Util.Padding import pad, unpad
 from PIL import Image
-from meta import encrypt_message_aes
 
 import moviepy.editor as mp
 import mysql.connector
