@@ -38,7 +38,7 @@
                 </tr>
               </thead>
               <tbody>
-                <form action="/request_to" method="POST">
+                <form action="{{ url_for('request_blueprint.req_to') }}" method="POST">
                   {% for user in result %}
                     <tr>
                       <td class="border p-2">{{ user[0] }}</td>
