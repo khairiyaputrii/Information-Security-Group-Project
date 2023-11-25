@@ -7,18 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <nav
-      class="bg-gradient-to-r from-green-400 via-green-300 to-green-100 shadow-lg"
-    >
+    <nav class="bg-gradient-to-r from-green-400 via-green-300 to-green-100 shadow-lg">
       <div class="container mx-auto">
         <div class="flex justify-between items-center p-3">
           <a href="#" class="text-white text-xl font-bold">REQUEST USER DATA</a>
           <div class="flex gap-3">
+            <button class="text-white bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              Home
+            </button>
             <form method="POST" action="/logout">
-              <button
-                type="submit"
-                class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
+              <button type="submit" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                 Logout
               </button>
             </form>
@@ -26,21 +24,89 @@
         </div>
       </div>
     </nav>
-    <div class="flex-col justify-center text-center items-center">
-      <h3>List of Users</h3>
-      <ul>
-        <form action="/request_to" method="POST">
-          {% for user in result %}
-          <li>
-            User ID: {{ user[0] }}, Username: {{ user[1] }}
-            <input type="hidden" name="user_destination" value="{{ user[0] }}" />
-            <button type="submit" name="request_data" value="true" class="border-2 border-black rounded-md p-2 hover:bg-black hover:text-white">
-              Request their data
-            </button>
-          </li>
-          {% endfor %}
-        </form>
-      </ul>
-    </div>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4 w-1/2 ml-4">
+      <div class="flex items-center justify-center flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-blue-500">
+        <div>
+          </div>
+          <label for="table-search" class="sr-only">Search</label>
+          <div class="relative items-center">
+              <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <svg class="w-4 h-4 text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                  </svg>
+              </div>
+              <input type="text" id="table-search-users" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for users">
+          </div>
+      </div>
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                  <th scope="col" class="px-6 py-3">
+                      Name
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                      Action
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr class="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-grey-600">
+                  <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-black">
+                      <div class="ps-3">
+                          <div class="text-base font-semibold">Neil Sims</div>
+                      </div>  
+                  </th>
+                  <td class="px-6 py-4">
+                      <!-- Modal toggle -->
+                      <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                  </td>
+              </tr>
+              <tr class="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-grey-600">
+                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-black">
+                      <div class="ps-3">
+                          <div class="text-base font-semibold">Bonnie Green</div>
+                      </div>
+                  </th>
+                  <td class="px-6 py-4">
+                      <!-- Modal toggle -->
+                      <a href="#" type="button" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                  </td>
+              </tr>
+              <tr class="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-grey-600">
+                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-black">
+                      <div class="ps-3">
+                          <div class="text-base font-semibold">Jese Leos</div>
+                      </div>
+                  </th>
+                  <td class="px-6 py-4">
+                      <!-- Modal toggle -->
+                      <a href="#" type="button" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                  </td>
+              </tr>
+              <tr class="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-grey-600">
+                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-black">
+                      <div class="ps-3">
+                          <div class="text-base font-semibold">Thomas Lean</div>
+                      </div>
+                  </th>
+                  <td class="px-6 py-4">
+                      <!-- Modal toggle -->
+                      <a href="#" type="button" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                  </td>
+              </tr>
+              <tr class="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-grey-600">
+                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-black">
+                      <div class="ps-3">
+                          <div class="text-base font-semibold">Leslie Livingston</div>
+                      </div>
+                  </th>
+                  <td class="px-6 py-4">
+                      <!-- Modal toggle -->
+                      <a href="#" type="button" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+
   </body>
 </html>
