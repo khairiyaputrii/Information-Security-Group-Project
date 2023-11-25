@@ -11,7 +11,7 @@ from backend.routes.main import root as routes_root
 from backend.routes.authentication import authentication as routes_authentication
 from backend.routes.encryption import encryption as routes_encryption
 from backend.routes.decryption import decryption as routes_decryption
-from backend.routes.request import request as routes_request
+from backend.routes.request import request_blueprint as routes_request
 
 app = Flask(__name__)
 app.secret_key = "secret_key_for_flash_messages"

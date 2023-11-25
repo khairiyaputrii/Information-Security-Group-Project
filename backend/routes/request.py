@@ -1,9 +1,9 @@
-from flask import Blueprint, Flask, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request as flask_request, redirect, url_for, flash, session
 from backend.database.db import create_connection
 
-request = Blueprint("request", __name__)
+request_blueprint = Blueprint("request", __name__)
 
-@request.route("/request")
+@request_blueprint.route("/request")
 def req():
     if "username" not in session:
         flash("You must log in first to access this page.", "flash-warning")
@@ -31,7 +31,7 @@ def req():
     
     return render_template("request.html", result=result, result_two=result_two)
 
-@request.route("/request_to", methods=["GET","POST"])
+@request_blueprint.route("/request_to", methods=["GET", "POST"])
 def req_to():
     if "username" not in session:
         flash("You must log in first to access this page.", "flash-warning")
@@ -40,22 +40,22 @@ def req_to():
     username = session["username"]
     userID = session["userID"]
     
-    if request.method == "POST":
-        user_destination = request.form["user_destination"]
+    if flask_request.method == "POST":
+        user_destination = flask_request.form["user_destination"]
 
         connection = create_connection()
         cursor = connection.cursor()
         insert_data_query = """
-        INSERT INTO request (
-            source_id,
-            destination_id
-        ) VALUES (%s, %s)
+            INSERT INTO request (
+                sourceID,
+                destinationID
+            ) VALUES (%s, %s)
         """
-        data = (username, user_destination)
+        data = (userID, user_destination)
         cursor.execute(insert_data_query, data)
 
-    connection.commit()
-    cursor.close()
-    connection.close()
+        connection.commit()
+        cursor.close()
+        connection.close()
     
     return render_template("request.html")
