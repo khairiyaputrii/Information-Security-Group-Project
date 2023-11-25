@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <nav class="bg-gradient-to-r from-pink-500 via-pink400 to-pink-300 shadow-lg">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center p-3">
+                <a href="#" class="text-white text-xl font-bold">FORM DATA</a>
+                <div class="flex gap-3">
+                    <form method="GET" action="/view_data">
+                        <button type="submit" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">View Encrypted Data</button>
+                    </form>
+                    <form method="POST" action="/logout">
+                        <button type="submit" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="mt-4">
+        <input type="Search" id="Search" name="Search" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
+        border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="Search">
+    </div>
+
+    
+    
+</body>
+</html>
