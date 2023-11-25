@@ -7,9 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <nav
-      class="bg-gradient-to-r from-green-400 via-green-300 to-green-100 shadow-lg"
-    >
+    <nav class="bg-gradient-to-r from-green-400 via-green-300 to-green-100 shadow-lg">
       <div class="container mx-auto">
         <div class="flex justify-between items-center p-3">
           <a href="#" class="text-white text-xl font-bold">REQUEST USER DATA</a>
@@ -26,21 +24,92 @@
         </div>
       </div>
     </nav>
-    <div class="flex-col justify-center text-center items-center">
-      <h3>List of Users</h3>
-      <ul>
-        <form action="/request_to" method="POST">
-          {% for user in result %}
-          <li>
-            User ID: {{ user[0] }}, Username: {{ user[1] }}
-            <input type="hidden" name="user_destination" value="{{ user[0] }}" />
-            <button type="submit" name="request_data" value="true" class="border-2 border-black rounded-md p-2 hover:bg-black hover:text-white">
-              Request their data
-            </button>
-          </li>
-          {% endfor %}
-        </form>
-      </ul>
+    <div class="flex justify-center text-center items-center divide-x divide-black">
+      <div class="p-4">
+        <h3 class="text-lg font-semibold mb-2">List of Users</h3>
+        <div class="overflow-x-auto">
+          {% if result %}
+            <table class="min-w-full border border-collapse">
+              <thead>
+                <tr>
+                  <th class="border p-2">User ID</th>
+                  <th class="border p-2">Username</th>
+                  <th class="border p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <form action="/request_to" method="POST">
+                  {% for user in result %}
+                    <tr>
+                      <td class="border p-2">{{ user[0] }}</td>
+                      <td class="border p-2">{{ user[1] }}</td>
+                      <td class="border p-2">
+                        <input
+                          type="hidden"
+                          name="user_destination"
+                          value="{{ user[0] }}"
+                        />
+                        <button
+                          type="submit"
+                          name="request_data"
+                          value="true"
+                          class="border-2 border-black rounded-md p-2 hover:bg-black hover:text-white"
+                        >
+                          Request their data
+                        </button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </form>
+              </tbody>
+            </table>
+          {% else %}
+            <p>There is no data available.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="p-4">
+        <h3 class="text-lg font-semibold mb-2">List of Requests</h3>
+        <div class="overflow-x-auto">
+          {% if result_two %}
+            <table class="min-w-full border border-collapse">
+              <thead>
+                <tr>
+                  <th class="border p-2">User ID</th>
+                  <th class="border p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <form action="#" method="POST">
+                  {% for user in result_two %}
+                    <tr>
+                      <td class="border p-2">{{ user[0] }}</td>
+                      <td class="border p-2">
+                        <input
+                          type="hidden"
+                          name="user_destination"
+                          value="{{ user[0] }}"
+                        />
+                        <button
+                          type="submit"
+                          name="request_data"
+                          value="true"
+                          class="border-2 border-black rounded-md p-2 hover:bg-black hover:text-white"
+                        >
+                          ACC
+                        </button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </form>
+              </tbody>
+            </table>
+          {% else %}
+            <p>There is no data available.</p>
+          {% endif %}
+        </div>
+      </div>
     </div>
   </body>
 </html>

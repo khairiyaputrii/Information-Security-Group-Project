@@ -21,10 +21,17 @@ def req():
     """
     cursor.execute(query)
     result = cursor.fetchall()
-    
-    return render_template("request.html", result=result)
 
-@request.route("/request-to", methods=["POST"])
+    query_two = """
+    SELECT id
+    FROM request
+    """
+    cursor.execute(query_two)
+    result_two = cursor.fetchall()
+    
+    return render_template("request.html", result=result, result_two=result_two)
+
+@request.route("/request_to", methods=["GET","POST"])
 def req_to():
     if "username" not in session:
         flash("You must log in first to access this page.", "flash-warning")
@@ -32,19 +39,20 @@ def req_to():
 
     username = session["username"]
     userID = session["userID"]
-    user_destination = request.form["user_destination"]
-
-    connection = create_connection()
-    cursor = connection.cursor()
     
-    insert_data_query = """
-    INSERT INTO request (
-        source_id,
-        destination_id
-    ) VALUES (%s, %s)
-    """
-    data = (username, user_destination)
-    cursor.execute(insert_data_query, data)
+    if request.method == "POST":
+        user_destination = request.form["user_destination"]
+
+        connection = create_connection()
+        cursor = connection.cursor()
+        insert_data_query = """
+        INSERT INTO request (
+            source_id,
+            destination_id
+        ) VALUES (%s, %s)
+        """
+        data = (username, user_destination)
+        cursor.execute(insert_data_query, data)
 
     connection.commit()
     cursor.close()
