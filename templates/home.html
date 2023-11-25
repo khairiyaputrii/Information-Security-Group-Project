@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <nav class="bg-gradient-to-r from-pink-500 via-pink400 to-pink-300 shadow-lg">
+    <nav class="bg-gradient-to-r from-pink-500 via-pink-400 to-pink-300 shadow-lg">
         <div class="container mx-auto">
             <div class="flex justify-between items-center p-3">
                 <a href="#" class="text-white text-xl font-bold">HOME</a>
@@ -19,17 +19,24 @@
             </div>
         </div>
     </nav> 
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="flex-col">
+    <div class="min-h-screen flex items-center justify-center gap-5 divide-x divide-black">
+        <div class="flex-col px-3">
             <svg class="w-48 h-48 text-black" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" fill="currentColor" />
             </svg>
-            <div class="text-center text-black text-lg">Username</div>
+            <div class="text-center text-black text-lg py-3">You Are: <span class="bg-gray-300 p-2 rounded-lg font-medium">{{ username }}</span></div>
         </div>
-        <div class="border-r-2 h-48 border-black mx-3"></div>
-        <div>
-            <a href="/templates/data_form.html" class="button bg-gradient-to-r from-pink-400 to-pink-300 text-white flex items-center justify-center px-20 py-8 rounded-tr-lg rounded-bl-lg hover:from-pink-400 hover:to-pink-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 mb-4">Fill in Data</a>
-            <a href="/templates/data_form.html" class="button bg-gradient-to-r from-pink-400 to-pink-300 text-white flex items-center justify-center px-10 py-8 rounded-tr-lg rounded-bl-lg hover:from-pink-400 hover:to-pink-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">Request Data</a>
+        <div class="w-[20%] px-3">
+            <form method="GET" action="/data_form">
+                <button type="submit" class="button w-full bg-gradient-to-r from-pink-400 to-pink-300 text-white flex items-center justify-center py-8 rounded-tr-lg rounded-bl-lg hover:from-pink-400 hover:to-pink-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 mb-4">
+                    Fill in Data
+                </button>
+            </form>
+            <form method="GET" action="/request">
+                <button type="submit" class="button w-full bg-gradient-to-r from-pink-400 to-pink-300 text-white flex items-center justify-center py-8 rounded-tr-lg rounded-bl-lg hover:from-pink-400 hover:to-pink-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
+                    Request Data
+                </button>
+            </form>
         </div>
     </div>    
 </body>

@@ -8,10 +8,6 @@ from cryptography.hazmat.backends import default_backend
 
 authentication = Blueprint("authentication", __name__)
 
-@authentication.route("/")
-def root():
-    return redirect(url_for("authentication.login"))
-
 @authentication.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -31,7 +27,7 @@ def login():
             flash("Login Successful.", "flash-success")
             session["username"] = username
             
-            return redirect(url_for("encryption.data_form"))
+            return redirect(url_for("root.home"))
         else:
             flash("Login failed. Check your data again.", "flash-error")
 
