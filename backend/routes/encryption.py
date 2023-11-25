@@ -143,6 +143,7 @@ def data_form():
                 data = (lasteducationAES, lasteducationDES, lasteducationARC4, user_id)
                 cursor.execute(insert_data_query, data)
 
+            # Commit only once after handling the existing or non-existing data
             connection.commit()
 
             end_time_dec = time.perf_counter()
@@ -155,7 +156,9 @@ def data_form():
                 "flash-success",
             )
 
-        cursor.close()
-        connection.close()
+            cursor.close()
+            connection.close()
+
+            return render_template("data_form.html")
 
     return render_template("data_form.html")
