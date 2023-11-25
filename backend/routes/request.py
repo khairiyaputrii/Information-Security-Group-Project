@@ -3,7 +3,7 @@ from backend.database.db import create_connection
 
 request_blueprint = Blueprint("request", __name__)
 
-@request_blueprint.route("/request")
+@request_blueprint.route("/request", methods=["GET", "POST"])
 def req():
     if "username" not in session:
         flash("You must log in first to access this page.", "flash-warning")
@@ -14,31 +14,6 @@ def req():
 
     connection = create_connection()
     cursor = connection.cursor()
-    
-    query = """
-    SELECT id, username
-    FROM users
-    """
-    cursor.execute(query)
-    result = cursor.fetchall()
-
-    query_two = """
-    SELECT id
-    FROM request
-    """
-    cursor.execute(query_two)
-    result_two = cursor.fetchall()
-    
-    return render_template("request.html", result=result, result_two=result_two)
-
-@request_blueprint.route("/request_to", methods=["GET", "POST"])
-def req_to():
-    if "username" not in session:
-        flash("You must log in first to access this page.", "flash-warning")
-        return redirect(url_for("authentication.login"))
-
-    username = session["username"]
-    userID = session["userID"]
     
     if flask_request.method == "POST":
         user_destination = flask_request.form["user_destination"]
@@ -54,8 +29,23 @@ def req_to():
         data = (userID, user_destination)
         cursor.execute(insert_data_query, data)
 
-        connection.commit()
-        cursor.close()
-        connection.close()
+    query = """
+    SELECT id, username
+    FROM users
+    WHERE id != %s
+    """
+    cursor.execute(query, (userID,))
+    result = cursor.fetchall()
+
+    query_two = """
+    SELECT id
+    FROM request
+    """
+    cursor.execute(query_two)
+    result_two = cursor.fetchall()
+
+    connection.commit()
+    cursor.close()
+    connection.close()
     
-    return render_template("request.html")
+    return render_template("request.html", result=result, result_two=result_two, current_user= userID)
