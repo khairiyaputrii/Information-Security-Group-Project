@@ -6,29 +6,83 @@
     <title>Form Data</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <nav class="bg-gradient-to-r from-green-400 via-green-300 to-green-100 shadow-lg">
+  <body class="relative min-h-screen overflow-hidden">
+    <nav
+      class="bg-gradient-to-r from-black via-amber-950 to-amber-600 shadow-lg fixed top-0 left-0 right-0"
+    >
       <div class="container mx-auto">
         <div class="flex justify-between items-center p-3">
-          <a href="#" class="text-white text-xl font-bold">REQUEST USER DATA</a>
+          <a href="/" class="text-white text-xl font-bold">NAVIGATION</a>
           <div class="flex gap-3">
+            <form method="GET" action="/home">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                HOME
+              </button>
+            </form>
+            <form method="GET" action="/request">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                REQUEST
+              </button>
+            </form>
+            <form method="GET" action="/data_form">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                FORM
+              </button>
+            </form>
+            <form method="GET" action="/view_data">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                VIEW
+              </button>
+            </form>
             <form method="POST" action="/logout">
               <button
                 type="submit"
-                class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="text-white border-2 border-red-600 hover:bg-red-600 hover:border-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                Logout
+                LOGOUT
               </button>
             </form>
           </div>
         </div>
       </div>
     </nav>
-    <div class="flex justify-center text-center items-center divide-x divide-black">
-      <div class="p-4">
-        <h3 class="text-lg font-semibold mb-2">List of Users</h3>
-        <div class="overflow-x-auto">
-          {% if result %}
+
+    <div class="pt-20">
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div id="alerts">
+        {% for message in messages %}
+        <div
+          class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:text-yellow-400 message border-2 border-yellow-400 w-fit mx-auto my-5"
+          role="alert"
+        >
+          <div class="text-center">{{ message }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+
+      <div
+        class="flex justify-center text-center divide-x divide-full w-screen"
+      >
+        <div class="w-1/3 p-10">
+          <h3 class="text-lg font-semibold">List of Users</h3>
+          <p class="text-sm italic text-gray-500 mb-5">
+            number of user in database
+          </p>
+          <div class="overflow-x-auto shadow-lg">
+            {% if result %}
             <table class="min-w-full border border-collapse">
               <thead>
                 <tr>
@@ -38,78 +92,143 @@
                 </tr>
               </thead>
               <tbody>
+                {% for user in result %}
                 <form action="/request" method="POST">
-                  {% for user in result %}
-                    <tr>
-                      <td class="border p-2">{{ user[0] }}</td>
-                      <td class="border p-2">{{ user[1] }}</td>
-                      <td class="border p-2">
-                        <input
-                          type="hidden"
-                          name="user_destination"
-                          value="{{ user[0] }}"
-                        />
-                        <button
-                          type="submit"
-                          name="request_data"
-                          value="true"
-                          class="border-2 border-black rounded-md p-2 hover:bg-black hover:text-white"
-                        >
-                          Request their data
-                        </button>
-                      </td>
-                    </tr>
-                  {% endfor %}
+                  <tr>
+                    <td class="border p-2">{{ user[0] }}</td>
+                    <td class="border p-2">{{ user[1] }}</td>
+                    <td class="border p-2">
+                      <input
+                        type="hidden"
+                        name="user_destination"
+                        value="{{ user[0] }}"
+                      />
+                      <button
+                        type="submit"
+                        name="request_data"
+                        value="true"
+                        class="border-2 text-yellow-500 border-yellow-500 rounded-md p-2 hover:bg-yellow-500 hover:text-white bg-yellow-100"
+                      >
+                        REQ
+                      </button>
+                    </td>
+                  </tr>
                 </form>
+                {% endfor %}
               </tbody>
             </table>
-          {% else %}
+            {% else %}
             <p>There is no data available.</p>
-          {% endif %}
+            {% endif %}
+          </div>
         </div>
-      </div>
 
-      <div class="p-4">
-        <h3 class="text-lg font-semibold mb-2">List of Requests</h3>
-        <div class="overflow-x-auto">
-          {% if result_two %}
+        <div class="w-1/3 p-10">
+          <h3 class="text-lg font-semibold">List of Requests</h3>
+          <p class="text-sm italic text-gray-500 mb-5">
+            number of user who want to see your data
+          </p>
+          <div class="overflow-x-auto shadow-lg">
+            {% if result_two %}
             <table class="min-w-full border border-collapse">
               <thead>
                 <tr>
                   <th class="border p-2">User ID</th>
+                  <th class="border p-2">Username</th>
                   <th class="border p-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <form action="#" method="POST">
-                  {% for user in result_two %}
-                    <tr>
-                      <td class="border p-2">{{ user[0] }}</td>
-                      <td class="border p-2">
-                        <input
-                          type="hidden"
-                          name="user_destination"
-                          value="{{ user[0] }}"
-                        />
-                        <button
-                          type="submit"
-                          name="request_data"
-                          value="true"
-                          class="border-2 border-black rounded-md p-2 hover:bg-black hover:text-white"
-                        >
-                          ACC
-                        </button>
-                      </td>
-                    </tr>
-                  {% endfor %}
+                {% for user in result_two %}
+                <form action="/request" method="POST">
+                  <tr>
+                    <td class="border p-2">{{ user[0] }}</td>
+                    <td class="border p-2">{{ user[1] }}</td>
+                    <td class="border p-2">
+                      <input
+                        type="hidden"
+                        name="user_who_req"
+                        value="{{ user[0] }}"
+                      />
+                      <button
+                        type="submit"
+                        name="request_data"
+                        value="true"
+                        class="border-2 text-green-500 border-green-500 rounded-md p-2 hover:bg-green-500 bg-green-100 hover:text-white"
+                      >
+                        ACC
+                      </button>
+                    </td>
+                  </tr>
                 </form>
+                {% endfor %}
               </tbody>
             </table>
-          {% else %}
+            {% else %}
             <p>There is no data available.</p>
-          {% endif %}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="w-1/3 p-10">
+          <h3 class="text-lg font-semibold mb-2">View Other Data</h3>
+          <div class="flex justify-center">
+            <p class="text-sm italic text-gray-500">you are looking at</p>
+            <form action="/request" method="POST" class="mx-2 text-sm">
+              <select
+                name="user_req_view"
+                id="user_req_view"
+                class="w-fit border rounded-lg overflow-hidden"
+              >
+                <option disabled selected value="">Choose...</option>
+                {% if result_two %} {% for user in result_two %}
+                <option value="{{ user[0] }}">{{ user[1] }}</option>
+                {% endfor %} {% endif %}
+              </select>
+              <button
+                class="px-2 py-1 rounded-md border shadow-sm"
+                type="submit"
+              >
+                <svg
+                  width="10px"
+                  height="10px"
+                  viewbox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
+                    stroke="#000000"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </form>
+            <p class="text-sm italic text-gray-500 mb-5">personal data</p>
+          </div>
+          <div
+            class="flex flex-col gap-2 text-center border p-5 rounded-lg shadow-lg"
+          >
+            <div class="py-2 px-4 bg-gray-200 rounded-lg text-left">
+              <p><span class="font-bold">Full Name :</span> Test</p>
+              <p><span class="font-bold">Email :</span> Test</p>
+              <p><span class="font-bold">Phone Number :</span> Test</p>
+              <p><span class="font-bold">Last Education :</span> Test</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <script>
+      const alerts = document.querySelectorAll(".message");
+
+      alerts.forEach((alert, index) => {
+        setTimeout(() => {
+          alert.style.display = "none";
+        }, 3000 * (index + 1));
+      });
+    </script>
   </body>
 </html>

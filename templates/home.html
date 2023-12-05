@@ -1,43 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-    <nav class="bg-gradient-to-r from-pink-500 via-pink-400 to-pink-300 shadow-lg">
-        <div class="container mx-auto">
-            <div class="flex justify-between items-center p-3">
-                <a href="#" class="text-white text-xl font-bold">HOME</a>
-                <div class="flex gap-3">
-                    <form method="POST" action="/logout">
-                        <button type="submit" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Logout</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav> 
-    <div class="min-h-screen flex items-center justify-center gap-5 divide-x divide-black">
-        <div class="flex-col px-3">
-            <svg class="w-48 h-48 text-black" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" fill="currentColor" />
-            </svg>
-            <div class="text-center text-black text-lg py-3">You Are: <span class="bg-gray-300 p-2 rounded-lg font-medium">{{ username }}</span></div>
-        </div>
-        <div class="w-[20%] px-3">
-            <form method="GET" action="/data_form">
-                <button type="submit" class="button w-full bg-gradient-to-r from-pink-400 to-pink-300 text-white flex items-center justify-center py-8 rounded-tr-lg rounded-bl-lg hover:from-pink-400 hover:to-pink-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 mb-4">
-                    Fill in Data
-                </button>
+  </head>
+  <body class="relative min-h-screen overflow-hidden">
+    <nav
+      class="bg-gradient-to-r from-black via-amber-950 to-amber-600 shadow-lg fixed top-0 left-0 right-0"
+    >
+      <div class="container mx-auto">
+        <div class="flex justify-between items-center p-3">
+          <a href="/" class="text-white text-xl font-bold">NAVIGATION</a>
+          <div class="flex gap-3">
+            <form method="GET" action="/home">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                HOME
+              </button>
             </form>
             <form method="GET" action="/request">
-                <button type="submit" class="button w-full bg-gradient-to-r from-pink-400 to-pink-300 text-white flex items-center justify-center py-8 rounded-tr-lg rounded-bl-lg hover:from-pink-400 hover:to-pink-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
-                    Request Data
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                REQUEST
+              </button>
+            </form>
+            <form method="GET" action="/data_form">
+                <button
+                  type="submit"
+                  class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  FORM
                 </button>
             </form>
+            <form method="GET" action="/view_data">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                VIEW
+              </button>
+            </form>
+            <form method="POST" action="/logout">
+              <button
+                type="submit"
+                class="text-white border-2 border-red-600 hover:bg-red-600 hover:border-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                LOGOUT
+              </button>
+            </form>
+          </div>
         </div>
-    </div>    
-</body>
+      </div>
+    </nav>
+
+    <div
+      class="min-h-screen flex items-center justify-center gap-5 "
+    >
+      <div class="flex-col p-5 bg-gray-200 border border-gray-400 shadow-lg">
+        <svg
+          class="w-40 h-40 text-black"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewbox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+            fill="currentColor"
+          />
+        </svg>
+        <div class="text-center text-black text-lg py-3">
+          <span class="bg-green-800 text-white p-2 rounded-lg font-medium italic px-3">{{ username }}</span>
+        </div>
+      </div>
+      <div class="w-[20%] px-3 flex flex-col gap-3">
+        <form method="GET" action="/data_form">
+          <button
+            type="submit"
+            class="button w-full border-2 flex items-center justify-center py-8 hover:shadow-md transition font-bold font-mono"
+          >
+            Fill in Data
+          </button>
+        </form>
+        <form method="GET" action="/request">
+          <button
+            type="submit"
+            class="button w-full border-2 flex items-center justify-center py-8 hover:shadow-md transition font-bold font-mono"
+          >
+            Request Data
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
 </html>

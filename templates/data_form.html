@@ -1,120 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Form Data</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-    <nav class="bg-gradient-to-r from-pink-500 via-pink400 to-pink-300 shadow-lg">
-        <div class="container mx-auto">
-            <div class="flex justify-between items-center p-3">
-                <a href="#" class="text-white text-xl font-bold">FORM DATA</a>
-                <div class="flex gap-3">
-                    <form method="GET" action="/view_data">
-                        <button type="submit" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">View Encrypted Data</button>
-                    </form>
-                    <form method="POST" action="/logout">
-                        <button type="submit" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Logout</button>
-                    </form>
-                </div>
-            </div>
+  </head>
+  <body class="relative min-h-screen overflow-hidden">
+    <nav
+      class="bg-gradient-to-r from-black via-amber-950 to-amber-600 shadow-lg fixed top-0 left-0 right-0"
+    >
+      <div class="container mx-auto">
+        <div class="flex justify-between items-center p-3">
+          <a href="/" class="text-white text-xl font-bold">NAVIGATION</a>
+          <div class="flex gap-3">
+            <form method="GET" action="/home">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                HOME
+              </button>
+            </form>
+            <form method="GET" action="/request">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                REQUEST
+              </button>
+            </form>
+            <form method="GET" action="/data_form">
+                <button
+                  type="submit"
+                  class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  FORM
+                </button>
+            </form>
+            <form method="GET" action="/view_data">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                VIEW
+              </button>
+            </form>
+            <form method="POST" action="/logout">
+              <button
+                type="submit"
+                class="text-white border-2 border-red-600 hover:bg-red-600 hover:border-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                LOGOUT
+              </button>
+            </form>
+          </div>
         </div>
+      </div>
     </nav>
-    <form method="POST" action="/data_form" class="flex flex-col justify-center items-center mt-16" enctype="multipart/form-data">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md message" role="alert" id="alert">
-                    <div class="flex">
-                        <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
-                        <div>
-                            <div id="alert-message" class="{{ message[1] }}">
-                                {{ message }}
-                            </div>
-                        </div>
-                    </div>
-                </div>            
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <div>
-            <h1 class="font-bold text-2xl pb-10">FILL ACCOUNT DATA</h1>
+    <form
+      method="POST"
+      action="/data_form"
+      class="min-h-screen flex flex-col justify-center items-center"
+      enctype="multipart/form-data"
+    >
+      {% with messages = get_flashed_messages() %} {% if messages %} {% for
+      message in messages %}
+      <div
+        class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md message"
+        role="alert"
+        id="alert"
+      >
+        <div class="flex">
+          <div class="py-1">
+            <svg
+              class="fill-current h-6 w-6 text-teal-500 mr-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewbox="0 0 20 20"
+            >
+              <path
+                d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"
+              />
+            </svg>
+          </div>
+          <div>
+            <div id="alert-message" class="{{ message[1] }}">{{ message }}</div>
+          </div>
         </div>
-        <div>
-            <label for="full_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Full Name</label>
-            <input type="text" id="full_name" name="full_name" class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="Enter your full name here">
-        </div>
-        
-        <div>
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Email</label>
-            <input type="email" id="email" name="email" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
-            border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="Enter you email here">
-        </div>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+      <div>
+        <h1 class="font-bold text-2xl pb-10">FILL ACCOUNT DATA</h1>
+      </div>
+      <div>
+        <label
+          for="full_name"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+          >Full Name</label
+        >
+        <input
+          type="text"
+          id="full_name"
+          name="full_name"
+          class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          required
+          placeholder="Enter your full name here"
+        />
+      </div>
 
-        <div>
-            <label for="phone_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black" >Phone Number</label>
-            <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]{11,13}" class="appearance-none block w-96 bg-gray-200 text-gray-700 border 
-            border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" required placeholder="(ex: 6281257414911)">
+      <div>
+        <label
+          for="email"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+          >Email</label
+        >
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          required
+          placeholder="Enter you email here"
+        />
+      </div>
+
+      <div>
+        <label
+          for="phone_number"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+          >Phone Number</label
+        >
+        <input
+          type="tel"
+          id="phone_number"
+          name="phone_number"
+          pattern="[0-9]{11,13}"
+          class="appearance-none block w-96 bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          required
+          placeholder="(ex: 6281257414911)"
+        />
+      </div>
+
+      <div class="block mb-5 text-sm font-medium text-gray-900 dark:text-black">
+        <div class="inline-block relative">
+          <div class="flex flex-col gap-2">
+            <label class="mr-3" for="last_education">Last Education</label>
+            <select
+              id="last_education"
+              name="last_education"
+              class="block appearance-none bg-gray-200 border w-96 border-red-500 px-4 py-3 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+              required
+            >
+              <option value="SD">SD</option>
+              <option value="SMP">SMP</option>
+              <option value="SMA">SMA</option>
+              <option value="S1">S1</option>
+              <option value="S2">S2</option>
+              <option value="S3">S3</option>
+            </select>
+          </div>
         </div>
-        
-        <div class="block mb-5 text-sm font-medium text-gray-900 dark:text-black">
-            <div class="inline-block relative">
-                <div class="flex flex-col gap-2">
-                    <label class="mr-3" for="last_education">Last Education</label>
-                    <select id="last_education" name="last_education" class="block appearance-none bg-gray-200 border w-96 border-red-500 px-4 py-3 pr-5 rounded shadow leading-tight focus:outline-none focus:shadow-outline" required>
-                        <option value="SD">SD</option>
-                        <option value="SMP">SMP</option>
-                        <option value="SMA">SMA</option>
-                        <option value="S1">S1</option>
-                        <option value="S2">S2</option>
-                        <option value="S3">S3</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="bg-blue-500 border-2 border-blue-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-lg focus:outline-none focus:shadow-outline w-96">Submit</button>
+      </div>
+      <button
+        type="submit"
+        class="border-2 border-blue-700 hover:bg-blue-700 text-blue-700 hover:text-white font-bold py-2 px-4 rounded-md shadow-lg focus:outline-none focus:shadow-outline w-96"
+      >
+        Submit
+      </button>
     </form>
 
     <script>
-        function validateForm() {
-            var pdfInput = document.getElementById("pdf_upload");
-            var imgInput = document.getElementById("img_upload");
-            var videoInput = document.getElementById("video_upload");
+      function validateForm() {
+        var pdfInput = document.getElementById("pdf_upload");
+        var imgInput = document.getElementById("img_upload");
+        var videoInput = document.getElementById("video_upload");
 
-            // Maximum file sizes in bytes
-            var maxPdfSize = 5 * 1024 * 1024; // 5MB
-            var maxImgSize = 10 * 1024 * 1024; // 10MB
-            var maxVideoSize = 15 * 1024 * 1024; // 15MB
+        // Maximum file sizes in bytes
+        var maxPdfSize = 5 * 1024 * 1024; // 5MB
+        var maxImgSize = 10 * 1024 * 1024; // 10MB
+        var maxVideoSize = 15 * 1024 * 1024; // 15MB
 
-            // Check PDF file size
-            if (pdfInput.files.length > 0 && pdfInput.files[0].size > maxPdfSize) {
-                alert("PDF file size exceeds the maximum allowed size (5MB).");
-                return false;
-            }
-
-            // Check Image file size
-            if (imgInput.files.length > 0 && imgInput.files[0].size > maxImgSize) {
-                alert("Image file size exceeds the maximum allowed size (10MB).");
-                return false;
-            }
-
-            // Check Video file size
-            if (videoInput.files.length > 0 && videoInput.files[0].size > maxVideoSize) {
-                alert("Video file size exceeds the maximum allowed size (15MB).");
-                return false;
-            }
-
-            return true;
+        // Check PDF file size
+        if (pdfInput.files.length > 0 && pdfInput.files[0].size > maxPdfSize) {
+          alert("PDF file size exceeds the maximum allowed size (5MB).");
+          return false;
         }
-        const alerts = document.querySelectorAll(".message");
-    
-        alerts.forEach((alert, index) => {
-            setTimeout(() => {
-                alert.style.display = "none";
-            }, 3000 * (index + 1));
-        });
+
+        // Check Image file size
+        if (imgInput.files.length > 0 && imgInput.files[0].size > maxImgSize) {
+          alert("Image file size exceeds the maximum allowed size (10MB).");
+          return false;
+        }
+
+        // Check Video file size
+        if (
+          videoInput.files.length > 0 &&
+          videoInput.files[0].size > maxVideoSize
+        ) {
+          alert("Video file size exceeds the maximum allowed size (15MB).");
+          return false;
+        }
+
+        return true;
+      }
+
+      const alerts = document.querySelectorAll(".message");
+
+      alerts.forEach((alert, index) => {
+        setTimeout(() => {
+          alert.style.display = "none";
+        }, 3000 * (index + 1));
+      });
     </script>
-</body>
+  </body>
 </html>

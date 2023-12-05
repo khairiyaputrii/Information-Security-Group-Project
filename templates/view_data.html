@@ -7,32 +7,59 @@
     <link rel="stylesheet" href="/css/styles.css" />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
+  <body class="relative min-h-screen overflow-hidden">
     <nav
-      class="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 shadow-lg"
+      class="bg-gradient-to-r from-black via-amber-950 to-amber-600 shadow-lg fixed top-0 left-0 right-0"
     >
       <div class="container mx-auto">
         <div class="flex justify-between items-center p-3">
-          <p class="text-white text-xl font-bold">View Data</p>
+          <a href="/" class="text-white text-xl font-bold">NAVIGATION</a>
           <div class="flex gap-3">
-            <a
-              href="{{ url_for('encryption.data_form') }}"
-              class="text-white bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >Back to Data Form</a
-            >
+            <form method="GET" action="/home">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                HOME
+              </button>
+            </form>
+            <form method="GET" action="/request">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                REQUEST
+              </button>
+            </form>
+            <form method="GET" action="/data_form">
+                <button
+                  type="submit"
+                  class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  FORM
+                </button>
+            </form>
+            <form method="GET" action="/view_data">
+              <button
+                type="submit"
+                class="text-white border-2 border-white hover:bg-white hover:text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                VIEW
+              </button>
+            </form>
             <form method="POST" action="/logout">
               <button
                 type="submit"
-                class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="text-white border-2 border-red-600 hover:bg-red-600 hover:border-red-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                Logout
+                LOGOUT
               </button>
             </form>
           </div>
         </div>
       </div>
     </nav>
-    <div class="flex flex-col gap-5 justify-center items-center mt-16">
+    <div class="min-h-screen flex flex-col gap-5 justify-center items-center">
       <div
         class="flex flex-col gap-2 text-center border p-5 rounded-lg shadow-lg"
       >
